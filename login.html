@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+  <meta charset="utf-8" />
+  <title>SIGE</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="" name="description" />
+  <meta content="" name="author" />
+  <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/css/metro.css" rel="stylesheet" />
+  <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="assets/css/style.css" rel="stylesheet" />
+  <link href="assets/css/style_responsive.css" rel="stylesheet" />
+  <link href="assets/css/style_default.css" rel="stylesheet" id="style_color" />
+  <link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" />
+  <link rel="shortcut icon" href="images/favicon(2).ico" />
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="login">
+  <!-- BEGIN LOGO -->
+  <div class="logo">
+    <img src="images/logo2_2.png" alt="" width="195" height="64" />  </div>
+  <!-- END LOGO -->
+  <!-- BEGIN LOGIN -->
+  <div class="content">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="form-vertical login-form" action="administrador.php" method="post">
+      <h3 class="form-title">Acceder a tu cuenta </h3>
+      <div class="alert alert-error hide">
+        <button class="close" data-dismiss="alert"></button>
+        <span>Introduzca cualquier nombre de usuario y passowrd.</span>
+      </div>
+      <div class="control-group">
+        <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+        <label class="control-label visible-ie8 visible-ie9">Usuario</label>
+        <div class="controls">
+          <div class="input-icon left">
+            <i class="icon-user"></i>
+            <input class="m-wrap placeholder-no-fix" type="text" placeholder="Username" name="log"/>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label visible-ie8 visible-ie9">Password</label>
+        <div class="controls">
+          <div class="input-icon left">
+            <i class="icon-lock"></i>
+            <input class="m-wrap placeholder-no-fix" type="password" placeholder="Password" name="pwd"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        
+        <button type="submit" class="btn green pull-right">
+        Login <i class="m-icon-swapright m-icon-white"></i>
+        </button>            
+      </div>
+    </form>
+ </div>
+
+<script src="assets/js/jquery-1.8.3.min.js"></script>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>  
+  <script src="assets/uniform/jquery.uniform.min.js"></script> 
+  <script src="assets/js/jquery.blockui.js"></script>
+  <script type="text/javascript" src="assets/jquery-validation/dist/jquery.validate.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+  /*  jQuery(document).ready(function() {     
+      App.initLogin();
+    });*/
+  </script>
+  <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
