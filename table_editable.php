@@ -4,9 +4,10 @@ header('Content-Type: text/html; charset=ISO-8859-1');
     include_once "includes/GestionBD.new.class.php";
 	$DBGestion = new GestionBD('AGENDAMIENTO');	
 	// Si la sesion no est? activa y/o autenticada ingresa a este paso
+	//imprimir($_SESSION);
 	if (!isset($_SESSION["active"]) == 1)
 	{
-		header("location:index.html");
+		header("location:logout.php");
 	}
 	// Si la sesion est? activa y autenticada ingresa a este paso
 	else
@@ -92,35 +93,42 @@ function mesa(){
 function cantidad(){
 	var pagina= "Ajax_total.php";
 	var capa = "capa_total";
-	var puesto = parseInt(document.getElementById('voto_1').value)+
-				parseInt(document.getElementById('voto_2').value)+
-				parseInt(document.getElementById('voto_3').value)+
-				parseInt(document.getElementById('voto_4').value)+
-				parseInt(document.getElementById('voto_5').value)+
-				parseInt(document.getElementById('voto_6').value)+
-				parseInt(document.getElementById('votonomarcado').value)+
-				parseInt(document.getElementById('votoblanco').value)+
-				parseInt(document.getElementById('votonulo').value);
-		
-	var valores = 'puesto=' + puesto + '&' + Math.random();
-	if(puesto!=''){ 			
+	var puesto = $("#voto_1").val();
+	var puesto2= $("#voto_2").val();
+	var puesto3= $("#voto_3").val();
+	var puesto4= $("#voto_4").val();
+	var puesto5= $("#voto_5").val();
+	var puesto6= $("#voto_6").val();
+	var puesto7= $("#votonomarcado").val();
+	var puesto8= $("#votoblanco").val();
+	var puesto9= $("#votonulo").val();
+	var total=parseFloat(puesto)+parseFloat(puesto2)+parseFloat(puesto3)+parseFloat(puesto4)+parseFloat(puesto5)+parseFloat(puesto6)+parseFloat(puesto7)+parseFloat(puesto8)+parseFloat(puesto9);
+	var valores = 'puesto=' +total+ '&' + Math.random();
+				
 	    FAjax (pagina,capa,valores,'POST',true)     	 
-	}
+	
 }
 function guardar(){
 
-	var puesto = parseInt(document.getElementById('voto_1').value)+
-				parseInt(document.getElementById('voto_2').value)+
-				parseInt(document.getElementById('voto_3').value)+
-				parseInt(document.getElementById('voto_4').value)+
-				parseInt(document.getElementById('voto_5').value)+
-				parseInt(document.getElementById('voto_6').value)+
-				parseInt(document.getElementById('votonomarcado').value)+
-				parseInt(document.getElementById('votoblanco').value)+
-				parseInt(document.getElementById('votonulo').value);
-	var sufragante = parseInt(document.getElementById('sufragantes').value);
-	if(puesto!=sufragante){
-		alert("Se encontro diferencia entre el total de Votos y Sufragantes  "+ (sufragante-puesto));		
+	var puesto = $("#voto_1").val();
+	var puesto2= $("#voto_2").val();
+	var puesto3= $("#voto_3").val();
+	var puesto4= $("#voto_4").val();
+	var puesto5= $("#voto_5").val();
+	var puesto6= $("#voto_6").val();
+	var puesto7= $("#votonomarcado").val();
+	var puesto8= $("#votoblanco").val();
+	var puesto9= $("#votonulo").val();
+	var total=parseFloat(puesto)+parseFloat(puesto2)+parseFloat(puesto3)+parseFloat(puesto4)+parseFloat(puesto5)+parseFloat(puesto6)+parseFloat(puesto7)+parseFloat(puesto8)+parseFloat(puesto9);
+
+	var sufragante = parseFloat($("#sufragantes").val());
+	
+	if(total!=sufragante && sufragante!=0){
+		alert("Se encontro diferencia entre el total de Votos y Sufragantes  "+ (sufragante-total));		
+		return false;
+	}
+	if(sufragante==0){
+		alert("Sufragantes no puede ser cero");		
 		return false;
 	}else{
 		return true;
@@ -399,7 +407,7 @@ echo '</select>';
 		?> <div class="control-group">
 		                     <div class="controls">
 				    <label class="control-label"><?php echo $nombre?><span class="required">*</span></label>
-                                 <input id="voto_<?php echo $orden?>" value="<?php echo $VOTOS_CANDIDATOS[$orden-1]?>" name="voto_<?php echo $orden?>" type="text"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+                                 <input id="voto_<?php echo $orden?>" value="<?php echo $VOTOS_CANDIDATOS[($orden-1)]?>" name="voto_<?php echo $orden?>" type="text"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								 
                               </div>
                            </div>    
@@ -430,20 +438,20 @@ echo '</select>';
                               <label class="control-label">Total Votos<span class="required">*</span></label>
                               <div class="controls">
 							   <span id="capa_total" >
-							               <input id="total" name="total" value="<?php echo $VOTOS_NO_MARCADOS+$VOTOS_NULOS+$VOTOS_BLANCO+$total?>" type="text"  class="required number" disabled />
+							               <input id="total" name="total" disabled value="<?php echo $VOTOS_NO_MARCADOS+$VOTOS_NULOS+$VOTOS_BLANCO+$total?>" type="text"  class="required number" disabled />
 								                                           </span>
                               </div>
                            </div>
 						    <div class="control-group">
                               <label class="control-label">Observaciones<span class="required">*</span></label>
                               <div class="controls">
-									<TEXTAREA COLS=5 ROWS=2 NAME="Observaciones" value="<?php echo $OBSERVACIONES?>" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>></TEXTAREA> 
+									<TEXTAREA COLS=5 ROWS=2 NAME="Observaciones" value="<?php echo $OBSERVACIONES?>" <?php if($bloquar!=""){ ?>   <?php  } ?>></TEXTAREA> 
 								                                           
                               </div>
                            </div>
                            <div class="form-actions">		
 						   
-								<button type="submit" class="btn green" onclick="return guardar()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>>Guardar</button>
+								<button type="submit" class="btn green" onclick="return guardar()" <?php if($bloquar!=""){ ?> disabled  <?php  } ?>>Guardar</button>
                             
                             
                            </div>

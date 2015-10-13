@@ -56,7 +56,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						LEFT JOIN municipios ON municipios.ID = candidato.MUNICIPIO
 						LEFT JOIN departamentos ON departamentos.IDDEPARTAMENTO = municipios.IDDEPARTAMENTO
 					  WHERE USUARIO = '".$usuario."' and CONTRASENA ='".$password."' and ACTIVO = 'Y'";
-					  exit;
+					
 				$DBGestion->ConsultaArray($sql);
 				$usuarios=$DBGestion->datos;	
 			
