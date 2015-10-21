@@ -162,6 +162,7 @@ if($add == 1){
                <ul class="sub">
                   <li class="active"><a href="table_editable.php">Registrar Resultados</a></li>
                   <li class="active"><a href="registrar_miembros.php">Registrar Simpatizante</a></li>
+				   <li class="active"><a href="registrar_sufragantes.php">Registrar Sufragantes</a></li>
                  
                </ul>
             </li>           

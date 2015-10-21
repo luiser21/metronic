@@ -1,8 +1,9 @@
 <?php 
 date_default_timezone_set('America/Bogota');
-if(date('H')>16 && date('d')==21){
-header("Location: registrar_sufragantes.php");
-}
+ if(date('H')>=16){ ?>
+<meta http-equiv=refresh content=20;URL=table_editable.php>
+<?php } 
+
 header('Content-Type: text/html; charset=ISO-8859-1'); 
 	session_start();
     include_once "includes/GestionBD.new.class.php";
@@ -27,7 +28,6 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 		
 	}
 ?>
-
 <?php 
 
 $add = (isset($_GET['add']) ? $_GET['add'] : 0); ;
