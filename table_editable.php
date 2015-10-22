@@ -291,6 +291,17 @@ function guardar(){
 </div>
            </div>
             <div class="row-fluid">
+		<ul class="breadcrumb">
+							<li>
+								<i class="icon-home"></i>
+								Registrar
+								<i class="icon-angle-right"></i>
+							</li>
+							Resultados E14</li>
+							<li class="pull-right no-text-shadow">
+								
+							</li>
+						</ul>
                <div class="span12">
                   <!-- BEGIN VALIDATION STATES-->
                   <div class="">
