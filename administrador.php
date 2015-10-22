@@ -97,7 +97,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					$_SESSION["consulta"] = $consulta;		
 					$_SESSION["mesa"] = $mesa;		
 					
-					header("location:table_editable.php");    
+					header("location:registrar_sufragantes.php");    
 				}else{
 					?>
 						<script type="text/javascript">
@@ -136,7 +136,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					@$mesa=$_SESSION["mesa"];	
 		if(!empty($usuario)){
 			if(@$usuario != ""){
-				header('Location: table_editable.php');	    
+				header('Location: registrar_sufragantes.php');	    
 			}
 		}
 	}
