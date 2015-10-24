@@ -6,4 +6,4 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 $puesto= (!empty($_POST['puesto']))? $_POST['puesto']: 0;
 
 ?>
-  <input id="total" name="total" type="text"  value="<?php echo $puesto?>" class="required number" disabled />
+  <input id="total" name="total" type="tel"  value="<?php echo $puesto?>" class="required number" disabled />

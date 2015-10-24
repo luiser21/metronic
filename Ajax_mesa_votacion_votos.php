@@ -41,18 +41,18 @@ foreach ($mun as $datos){
 	
 	
  if($VOTOS_CANDIDATOS==""){			
-				    $VOTOS_BLANCO = 0;
-					 $VOTOS_NULOS = 0;
-					 $VOTOS_NO_MARCADOS =0;
-					 $SUFRAGANTES =0;
+				    $VOTOS_BLANCO ="";
+					 $VOTOS_NULOS ="";
+					 $VOTOS_NO_MARCADOS ="";
+					 $SUFRAGANTES ="";
 					 $OBSERVACIONES = "";
-					  $VOTOS_CANDIDATOS = "0,0,0,0,0,0";
+					  $VOTOS_CANDIDATOS = ",,,,,";
 				}	?>					 
                              
 						      <div class="control-group">
                               <label class="control-label">Total Sufragantes<span class="required">*</span></label>
                               <div class="controls">
-							               <input id="sufragantes" name="sufragantes" type="text"  value="<?php echo $SUFRAGANTES?>" class="required number" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+							               <input id="sufragantes" name="sufragantes" type="tel"  value="<?php echo $SUFRAGANTES?>" class="required number" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								                                           
                               </div>
                            </div>
@@ -77,7 +77,7 @@ foreach ($mun as $datos){
 		?> <div class="control-group">
 		                     <div class="controls">
 				    <label class="control-label"><?php echo $nombre?><span class="required">*</span></label>
-                                 <input id="voto_<?php echo $orden?>" value="<?php echo $VOTOS_CANDIDATOS[($orden-1)]?>" name="voto_<?php echo $orden?>" type="text"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+                                 <input id="voto_<?php echo $orden?>" value="<?php echo $VOTOS_CANDIDATOS[($orden-1)]?>" name="voto_<?php echo $orden?>" type="tel"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								 
                               </div>
                            </div>    
@@ -86,21 +86,21 @@ foreach ($mun as $datos){
 							  <div class="control-group">
                               <label class="control-label">Votos en Blanco<span class="required">*</span></label>
                               <div class="controls">
-							               <input id="votoblanco" name="votoblanco" value="<?php echo $VOTOS_BLANCO?>" type="text"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+							               <input id="votoblanco" name="votoblanco" value="<?php echo $VOTOS_BLANCO?>" type="tel"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								                                           
                               </div>
                            </div>
 						   <div class="control-group">
                               <label class="control-label">Votos Nulos<span class="required">*</span></label>
                               <div class="controls">
-							               <input id="votonulo" name="votonulo" type="text" value="<?php echo $VOTOS_NULOS?>"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+							               <input id="votonulo" name="votonulo" type="tel" value="<?php echo $VOTOS_NULOS?>"  class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								                                           
                               </div>
                            </div>
 						   <div class="control-group">
                               <label class="control-label">Votos no Marcados<span class="required">*</span></label>
                               <div class="controls">
-							               <input id="votonomarcado" name="votonomarcado" type="text"   value="<?php echo $VOTOS_NO_MARCADOS?>" class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
+							               <input id="votonomarcado" name="votonomarcado" type="tel"   value="<?php echo $VOTOS_NO_MARCADOS?>" class="required number" onKeyup="cantidad()" <?php if($bloquar!=""){ ?>  disabled <?php  } ?>/>
 								                                           
                               </div>
                            </div>
@@ -108,7 +108,7 @@ foreach ($mun as $datos){
                               <label class="control-label">Total Votos<span class="required">*</span></label>
                               <div class="controls">
 							   <span id="capa_total" >
-							               <input id="total" name="total" disabled value="<?php echo $VOTOS_NO_MARCADOS+$VOTOS_NULOS+$VOTOS_BLANCO+$total?>" type="text"  class="required number" disabled />
+							               <input id="total" name="total" disabled value="<?php echo $VOTOS_NO_MARCADOS+$VOTOS_NULOS+$VOTOS_BLANCO+$total?>" type="tel"  class="required number" disabled />
 								                                           </span>
                               </div>
                            </div>

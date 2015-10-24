@@ -24,6 +24,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 				foreach (@$usuario_consulta as $datos2){
 					if($datos2['ASOSIADO']!=''){						
 						$usuario=$datos2['ASOSIADO'];
+						$usuarioasociado=$datos2['USUARIO'];
 						$sql="SELECT usuario.CONTRASENA FROM usuario WHERE USUARIO = '".$datos2['ASOSIADO']."' and ACTIVO = 'Y'";
 						$DBGestion->ConsultaArray($sql);
 						$usuario_consulta2=$DBGestion->datos;	
@@ -95,8 +96,9 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					$_SESSION["eslogan"] = $eslogan;
 					$_SESSION["votosprevistos"] = $votos;	
 					$_SESSION["consulta"] = $consulta;		
-					$_SESSION["mesa"] = $mesa;		
-					
+					$_SESSION["mesa"] = $mesa;	
+					$_SESSION["usuarioasociado"] = $usuarioasociado;						
+				
 					header("location:registrar_sufragantes.php");    
 				}else{
 					?>
@@ -134,6 +136,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 				   @$votos = $_SESSION["votosprevistos"];
 					@$consulta=$_SESSION["consulta"];	
 					@$mesa=$_SESSION["mesa"];	
+					@$usuarioasociado=$_SESSION["usuarioasociado"];
 		if(!empty($usuario)){
 			if(@$usuario != ""){
 				header('Location: registrar_sufragantes.php');	    

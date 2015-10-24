@@ -4,9 +4,9 @@ include_once "includes/GestionBD.new.class.php";
 $DBGestion = new GestionBD('AGENDAMIENTO');	
 	session_start();
 $puesto= (!empty($_POST['puesto']))? $_POST['puesto']: 0;
-
-echo '<select class="span6 m-wrap; required" name="mesas" onclick="mesa_votos()" id="mesas" >';   
-
+?>
+<select class="required" name="mesas" onclick="mesa_votos()" id="mesas" > 
+<?php
   $sql="SELECT
 				mesas.ID,
 				mesas.MESA
@@ -20,13 +20,13 @@ echo '<select class="span6 m-wrap; required" name="mesas" onclick="mesa_votos()"
 	}
 $DBGestion->ConsultaArray($sql);
 $mun=$DBGestion->datos;	
-	
-echo '<option value="">Seleccione....</option>'; 
+	?>
+<option value="">Seleccione....</option>
+<?php
 foreach ($mun as $datos){
 	 $id = $datos['ID'];
 	 $nombre = $datos['MESA'];
 	echo '<option value="'.$id.'">'.$nombre.'</option>';	
 		
-}
-echo '</select>';
-?>
+} ?>
+</select>

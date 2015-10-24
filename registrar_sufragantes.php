@@ -2,8 +2,7 @@
 date_default_timezone_set('America/Bogota');
 if(date('H')>16 && date('d')==25){
 header("Location: table_editable.php");
-}
- 
+} 
 header('Content-Type: text/html; charset=ISO-8859-1'); 
 	session_start();
 	
@@ -29,7 +28,7 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 		
 		}
 	}
-			exit;*/
+			exit; */
 	// Si la sesion no est? activa y/o autenticada ingresa a este paso
 	//imprimir($_SESSION);
 	if (!isset($_SESSION["active"]) == 1)
@@ -63,12 +62,7 @@ if($add == 1){
 	$puestoreg=1;	
 	if($puestoreg=='1'){
 		
-			 $sql="SELECT USUARIO from usuario where mesa='".$_SESSION["mesa"]."'";			
-			$DBGestion->ConsultaArray($sql);				
-			$candidatos=$DBGestion->datos;				
-			 foreach ($candidatos as $datos2){
-				 $idusuario =$datos2['USUARIO'];				 
-			}	
+			
 			$sql="SELECT MESA from mesas where ID=".$mesas;			
 			$DBGestion->ConsultaArray($sql);				
 			$mesa=$DBGestion->datos;				
@@ -76,7 +70,7 @@ if($add == 1){
 				 $mesa1 =$datos2['MESA'];				 
 			}	
 			 $sql="UPDATE boletines_departamentos set MOVILIZADOS='".$sufragantes."', META=1
-				    WHERE candidato=".$_SESSION['idcandidato']." and encargado='".$idusuario."' and zona='MESA ".$mesa1."'";	
+				    WHERE candidato=".$_SESSION['idcandidato']." and encargado='".$_SESSION['usuarioasociado']."' and zona='MESA ".$mesa1."'";	
 			
 			$DBGestion->Consulta($sql);	
 			 $sql="UPDATE boletines set MOVILIZADOS=MOVILIZADOS+'".$sufragantes."'
@@ -116,9 +110,7 @@ function mesa_votos(){
 	var capa = "capa_mesas_votos";
 	var puesto = document.getElementById('mesas').value;
 	var valores = 'mesas=' + puesto + '&' + Math.random();
-	if(puesto!=''){ 			
-	    FAjax (pagina,capa,valores,'POST',true)     	 
-	}
+	FAjax (pagina,capa,valores,'POST',true)     	 
 }
 
 function guardar(){
@@ -205,7 +197,7 @@ function guardar(){
 			{
 				$sesion= "<span class=\"style1\"><b> </b></span> ".$nombre; 
 			}
-		?><?php echo "   ".$sesion?></span>
+		?><?php echo "   ".$sesion." (".$_SESSION['usuarioasociado'].") "?></span>
                   <i class="icon-angle-down"></i>                  </a>
                   <ul class="dropdown-menu">
                     
@@ -370,20 +362,20 @@ foreach ($mun as $datos){
 	 $VOTOS_CANDIDATOS = $datos['VOTOS_CANDIDATOS'];
 	echo '<option value="'.$id.'" >'.$nombre.'</option>';
 		
-}
-echo '</select>';
-?>
+}?>
+</select>
+</span>
 		
-	<?php }else { ?>
-								   <select class="span6 m-wrap; required" name="mesas">
-						<option value="">Seleccione Puesto de Votacion....</option> </span>
-					 </select>     
-<?php } ?>
+	<?php } ?>
+			
 						      </div>
-                           </div> 
-							<div id="capa_mesas_votos">
+                           </div>
+<div class="control-group">
+                              <div class="controls">						   
+							<span id="capa_mesas_votos">
 							
-							</div>
+							</span>
+							</div></div>
 							         
 							 
 						  

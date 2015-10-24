@@ -223,7 +223,7 @@ function guardar(){
 			{
 				$sesion= "<span class=\"style1\"><b> </b></span> ".$nombre; 
 			}
-		?><?php echo "   ".$sesion?></span>
+		?><?php echo "   ".$sesion." (".$_SESSION['usuarioasociado'].") "?></span>
                   <i class="icon-angle-down"></i>                  </a>
                   <ul class="dropdown-menu">
                     
