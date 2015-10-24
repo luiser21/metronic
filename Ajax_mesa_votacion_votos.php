@@ -47,7 +47,9 @@ foreach ($mun as $datos){
 					 $SUFRAGANTES ="";
 					 $OBSERVACIONES = "";
 					  $VOTOS_CANDIDATOS = ",,,,,";
-				}	?>					 
+				}	?>	
+
+<?php } ?>				
                              
 						      <div class="control-group">
                               <label class="control-label">Total Sufragantes<span class="required">*</span></label>
@@ -125,4 +127,3 @@ foreach ($mun as $datos){
                             
                             
                            </div>
-<?php } ?>

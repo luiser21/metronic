@@ -388,20 +388,19 @@ foreach ($mun as $datos){
 	 $VOTOS_CANDIDATOS = $datos['VOTOS_CANDIDATOS'];
 	echo '<option value="'.$id.'" >'.$nombre.'</option>';
 		
-}
-echo '</select>';
-?>
-		
-	<?php }else { ?>
-								   <select class="span6 m-wrap; required" name="mesas">
-						<option value="">Seleccione Puesto de Votacion....</option> </span>
-					 </select>     
+} ?>
+</select>
 <?php } ?>
-						      </div>
-                           </div> 
-							<div id="capa_mesas_votos">
+							 
+
+						  				      </div>
+                           </div>
+<div class="control-group">
+                              <div class="controls">						   
+							<span id="capa_mesas_votos">
 							
-							</div>
+							</span>
+							</div></div>
 							         
 							 
 						  
