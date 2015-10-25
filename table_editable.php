@@ -1,6 +1,6 @@
 <?php 
 date_default_timezone_set('America/Bogota');
-if(date('H')>16 && date('d')==21){
+if(date('H')<16 && date('d')==25){
 header("Location: registrar_sufragantes.php");
 }
 header('Content-Type: text/html; charset=ISO-8859-1'); 

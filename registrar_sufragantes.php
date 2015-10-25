@@ -1,13 +1,35 @@
 <?php 
 date_default_timezone_set('America/Bogota');
- if(date('H')>=16){ ?>
-<meta http-equiv=refresh content=20;URL=table_editable.php>
-<?php } 
-
+if(date('H')>16 && date('d')==25){
+header("Location: table_editable.php");
+}
+ 
 header('Content-Type: text/html; charset=ISO-8859-1'); 
 	session_start();
+	
     include_once "includes/GestionBD.new.class.php";
+	
+	
 	$DBGestion = new GestionBD('AGENDAMIENTO');	
+	/*
+	$sql="SELECT USUARIO,mesa from usuario where consulta=1 and asosiado='rubendario'";
+			
+			$DBGestion->ConsultaArray($sql);				
+			$candidatos=$DBGestion->datos;	
+			
+			foreach($candidatos as $datos){
+				$datos['USUARIO'];
+				$mesa=explode(',',$datos['mesa']);
+				foreach($mesa as $datos2){
+					
+					$sql="INSERT INTO boletines_departamentos (MOVILIZADOS, ZONA,ENCARGADO,CANDIDATO,META) 
+					VALUES (0,'MESA ".$datos2."','".$datos['USUARIO']."',".$_SESSION['idcandidato'].",0)";										
+					$DBGestion->Consulta($sql);	
+											
+		
+		}
+	}
+			exit;*/
 	// Si la sesion no est? activa y/o autenticada ingresa a este paso
 	//imprimir($_SESSION);
 	if (!isset($_SESSION["active"]) == 1)
@@ -35,50 +57,43 @@ $add = (isset($_GET['add']) ? $_GET['add'] : 0); ;
 
 if($add == 1){
 
-    @$puesto=(isset($_POST['puestos']) ? $_POST['puestos'] : 0);
-    @$voto_1=(isset($_POST['voto_1']) ? $_POST['voto_1'] : 0);
-	@$voto_2=(isset($_POST['voto_2']) ? $_POST['voto_2'] : 0);
-	@$voto_3=(isset($_POST['voto_3']) ? $_POST['voto_3'] : 0);
-	@$voto_4=(isset($_POST['voto_4']) ? $_POST['voto_4'] : 0);
-	@$voto_5=(isset($_POST['voto_5']) ? $_POST['voto_5'] : 0);
-	@$voto_6=(isset($_POST['voto_6']) ? $_POST['voto_6'] : 0);
+    @$puesto=(isset($_POST['puestos']) ? $_POST['puestos'] : 0);  
     @$mesas=(isset($_POST['mesas']) ? $_POST['mesas'] : 0);
-	  @$sufragantes=(isset($_POST['sufragantes']) ? $_POST['sufragantes'] : 0);
-	  	  @$votoblanco=(isset($_POST['votoblanco']) ? $_POST['votoblanco'] : 0);
-		  	  @$votonulo=(isset($_POST['votonulo']) ? $_POST['votonulo'] : 0);
-			  	  @$votonomarcado=(isset($_POST['votonomarcado']) ? $_POST['votonomarcado'] : 0);
-	 @$Observaciones=(isset($_POST['Observaciones']) ? $_POST['Observaciones'] : 0);
-	$puestoreg=1;
-	
+    @$sufragantes=(isset($_POST['sufragantes']) ? $_POST['sufragantes'] : 0);	  	 
+	$puestoreg=1;	
 	if($puestoreg=='1'){
 		
-			$sql="SELECT ID from candidato where NTARJETON in (1,2,3,4,5,6) and MUNICIPIO=".$_SESSION["idmunicipio"]." order by NTARJETON";
+			 $sql="SELECT USUARIO from usuario where mesa='".$_SESSION["mesa"]."'";			
 			$DBGestion->ConsultaArray($sql);				
-			$candidatos=$DBGestion->datos;	
-			$id="0";
+			$candidatos=$DBGestion->datos;				
 			 foreach ($candidatos as $datos2){
-				 $id =$id.','. $datos2['ID'];
-				 
+				 $idusuario =$datos2['USUARIO'];				 
 			}	
-			 $sql="UPDATE mesas set VOTOS_CANDIDATOS='".$voto_1.','.$voto_2.','.$voto_3.','.$voto_4.','.$voto_5.','.$voto_6."',
-						CANDIDATOS='".$id."',VOTOS_BLANCO=".$votoblanco.",VOTOS_NULOS=".$votonulo.",VOTOS_NO_MARCADOS=".$votonomarcado.",
-						SUFRAGANTES=".$sufragantes.",OBSERVACIONES='".$Observaciones."'
-						WHERE ID=".$mesas." AND IDPUESTO=".$puesto;										
+			$sql="SELECT MESA from mesas where ID=".$mesas;			
+			$DBGestion->ConsultaArray($sql);				
+			$mesa=$DBGestion->datos;				
+			 foreach ($mesa as $datos2){
+				 $mesa1 =$datos2['MESA'];				 
+			}	
+			 $sql="UPDATE boletines_departamentos set MOVILIZADOS='".$sufragantes."', META=1
+				    WHERE candidato=".$_SESSION['idcandidato']." and encargado='".$idusuario."' and zona='MESA ".$mesa1."'";	
+			
 			$DBGestion->Consulta($sql);	
-				
-		
-		
+			 $sql="UPDATE boletines set MOVILIZADOS=MOVILIZADOS+'".$sufragantes."'
+				    WHERE candidato=".$_SESSION['idcandidato']." and hora_real=".date('H');	
+			
+			$DBGestion->Consulta($sql);					
 	 ?>
        	 <script language="javascript">
-	       	 alert("Se ingreso el voto exitosamente"); 
-	       	 window.location="table_editable.php";
+	       	 alert("Se ingreso los sufragantes exitosamente"); 
+	       	 window.location="registrar_sufragantes.php";
        	 </script>
 	   <?php	
 	}else{
 		 ?>
        	 <script language="javascript">
 	       	alert("Hubo un Problema); 
-	       	window.location="table_editable.php";
+	       	window.location="registrar_sufragantes.php";
        	 </script>
 	   <?php
 	}
@@ -97,7 +112,7 @@ function mesa(){
 }
 
 function mesa_votos(){
-	var pagina= "Ajax_mesa_votacion_votos.php";
+	var pagina= "Ajax_mesa_votacion_sufragantes.php";
 	var capa = "capa_mesas_votos";
 	var puesto = document.getElementById('mesas').value;
 	var valores = 'mesas=' + puesto + '&' + Math.random();
@@ -105,43 +120,10 @@ function mesa_votos(){
 	    FAjax (pagina,capa,valores,'POST',true)     	 
 	}
 }
-function cantidad(){
-	var pagina= "Ajax_total.php";
-	var capa = "capa_total";
-	var puesto = $("#voto_1").val();
-	var puesto2= $("#voto_2").val();
-	var puesto3= $("#voto_3").val();
-	var puesto4= $("#voto_4").val();
-	var puesto5= $("#voto_5").val();
-	var puesto6= $("#voto_6").val();
-	var puesto7= $("#votonomarcado").val();
-	var puesto8= $("#votoblanco").val();
-	var puesto9= $("#votonulo").val();
-	var total=parseFloat(puesto)+parseFloat(puesto2)+parseFloat(puesto3)+parseFloat(puesto4)+parseFloat(puesto5)+parseFloat(puesto6)+parseFloat(puesto7)+parseFloat(puesto8)+parseFloat(puesto9);
-	var valores = 'puesto=' +total+ '&' + Math.random();
-				
-	    FAjax (pagina,capa,valores,'POST',true)     	 
-	
-}
+
 function guardar(){
-
-	var puesto = $("#voto_1").val();
-	var puesto2= $("#voto_2").val();
-	var puesto3= $("#voto_3").val();
-	var puesto4= $("#voto_4").val();
-	var puesto5= $("#voto_5").val();
-	var puesto6= $("#voto_6").val();
-	var puesto7= $("#votonomarcado").val();
-	var puesto8= $("#votoblanco").val();
-	var puesto9= $("#votonulo").val();
-	var total=parseFloat(puesto)+parseFloat(puesto2)+parseFloat(puesto3)+parseFloat(puesto4)+parseFloat(puesto5)+parseFloat(puesto6)+parseFloat(puesto7)+parseFloat(puesto8)+parseFloat(puesto9);
-
-	var sufragante = parseFloat($("#sufragantes").val());
 	
-	if(total!=sufragante && sufragante!=0){
-		alert("Se encontro diferencia entre el total de Votos y Sufragantes  "+ (sufragante-total));		
-		return false;
-	}
+	var sufragante = parseFloat($("#sufragantes").val());
 	if(sufragante==0){
 		alert("Sufragantes no puede ser cero");		
 		return false;
@@ -300,7 +282,7 @@ function guardar(){
                      </div>
                      <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form action="table_editable.php?add=1" id="form_sample_1" class="form-horizontal" method="post">
+                        <form action="registrar_sufragantes.php?add=1" id="form_sample_1" class="form-horizontal" method="post">
                            <div class="alert alert-error hide">
                               <button class="close" data-dismiss="alert"></button>
                               Usted tiene algunos errores de forma. Por favor , consulte más abajo.
