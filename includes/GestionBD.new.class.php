@@ -25,7 +25,7 @@ class GestionBD{
 	public $Error;
 
 	public function GestionBD($TipoDB, $database = ""){
-		$this->servidor = "localhost";
+		$this->servidor = "127.0.0.1";
 		$this->usuario = "root";
 		$this->basedatos = "";
 		$this->db = "electoral";
@@ -53,7 +53,7 @@ class GestionBD{
 			$BasesDatos = XML2Array(BASESDEDATOS);
 		//date_default_timezone_set('America/Bogota');		
 				$this->basedatos = 'MYSQL';
-				$this->servidor = 'localhost';
+				$this->servidor = '127.0.0.1';
 				$this->usuario = 'root';
 				$this->pass = '';			
 			

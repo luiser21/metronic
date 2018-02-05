@@ -8,7 +8,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 	{		
 			@$usuario = (!empty($_POST["log"]))?  $_POST["log"] : "";
 			@$password = (!empty($_POST["pwd"]))?  $_POST["pwd"] : "";
-			$consulta=0;
+			//$consulta=0;
 			$mesa=0;
             if(@$usuario != ""){
 				$password=Hash::calcSHA($password);	
@@ -17,7 +17,10 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						usuario.CONSULTA,				
 						usuario.ASOSIADO,
 						usuario.CONTRASENA,
-						usuario.MESA
+						usuario.MESA AS MESASASIGNADAS,
+						usuario.PUESTO AS PUSTOSASIGNADOS,
+						usuario.DEPARTAMENTOS AS DEPARTAMENTOSASIGNADOS,
+						usuario.MUNICIPAL AS MUNICIPIOSASIGNADOS
 						FROM usuario WHERE USUARIO = '".$usuario."' and CONTRASENA ='".$password."' and ACTIVO = 'Y'";				
 				$DBGestion->ConsultaArray($sql);
 				$usuario_consulta=$DBGestion->datos;				
@@ -30,7 +33,11 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						$usuario_consulta2=$DBGestion->datos;	
 						$password=$usuario_consulta2[0]['CONTRASENA'];
 						$consulta=$datos2['CONSULTA'];
-						$mesa = $datos2['MESA'];	
+						$mesa = $datos2['MESASASIGNADAS'];
+						$DEPARTAMENTOSASIGNADOS=$datos2['DEPARTAMENTOSASIGNADOS'];
+						$PUSTOSASIGNADOS=$datos2['PUSTOSASIGNADOS'];
+						$MUNICIPIOSASIGNADOS=$datos2['MUNICIPIOSASIGNADOS'];
+						
 					}
 				}
 				//Encriptar el password para hacer match con el registro en la DB	
@@ -38,6 +45,10 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						candidato.ID AS IDCANDIDATO,
 						usuario.USUARIO,
 						usuario.PERMISO,
+						usuario.MESA AS MESASASIGNADAS,
+						usuario.PUESTO AS PUSTOSASIGNADOS,
+						usuario.DEPARTAMENTOS AS DEPARTAMENTOSASIGNADOS,
+						usuario.MUNICIPAL AS MUNICIPIOSASIGNADOS,
 						CONCAT(candidato.NOMBRES,' ',candidato.APELLIDOS) AS NOMBRE,
 						partidos_politicos.NOMBRECORTO AS PARTIDO,
 						partidos_politicos.LOGO2 AS LOGO2,
@@ -47,8 +58,10 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						candidato.ESLOGAN,
 						candidato.VOTOSPREVISTOS,
 						candidato.MUNICIPIO AS IDMUNICIPIO,
+						candidato.PERIODO,
 						municipios.NOMBRE AS MUNICIPIO,
 						departamentos.NOMBRE AS DEPARTAMENTO
+						
 						FROM
 						usuario
 						LEFT JOIN candidato ON candidato.IDUSUARIO = usuario.IDUSUARIO
@@ -75,7 +88,13 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					@$ntarjeton = $datos['NTARJETON'];	
 					@$logo2 = $datos['LOGO2'];
 					@$eslogan = $datos['ESLOGAN'];	
+					@$periodo = $datos['PERIODO'];	
 					@$votos = $datos['VOTOSPREVISTOS'];	
+					@$consulta=$datos2['CONSULTA'];
+					@$mesa = $datos2['MESASASIGNADAS'];
+					@$DEPARTAMENTOSASIGNADOS=$datos2['DEPARTAMENTOSASIGNADOS'];
+					@$PUSTOSASIGNADOS=$datos2['PUSTOSASIGNADOS'];
+					@$MUNICIPIOSASIGNADOS=$datos2['MUNICIPIOSASIGNADOS'];
 					
 						
 				}				
@@ -94,12 +113,23 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					$_SESSION["tipocandidato"] = $tipocandidato;	
 					$_SESSION["logo2"] = $logo2;	
 					$_SESSION["eslogan"] = $eslogan;
+					$_SESSION["periodo"] = $periodo;
 					$_SESSION["votosprevistos"] = $votos;	
 					$_SESSION["consulta"] = $consulta;		
-					$_SESSION["mesa"] = $mesa;	
-					$_SESSION["usuarioasociado"] = $usuarioasociado;						
-				
-					header("location:registrar_sufragantes.php");    
+					$_SESSION["MESASASIGNADAS"] = $mesa;	
+					$_SESSION["usuarioasociado"] = $usuarioasociado;		
+					$_SESSION["DEPARTAMENTOSASIGNADOS"] = $DEPARTAMENTOSASIGNADOS;			
+					$_SESSION["PUSTOSASIGNADOS"] = $PUSTOSASIGNADOS;	
+					$_SESSION["MUNICIPIOSASIGNADOS"] = $MUNICIPIOSASIGNADOS;	
+				  
+					if(@$consulta==1){
+						header('Location: registrar_miembros.php');	    
+					}elseif(@$consulta==0){
+						header('Location: diad_electoral.php');	    
+					}elseif(@$consulta==4){
+						header('Location: informe_municipal.php');	    
+					}
+					
 				}else{
 					?>
 						<script type="text/javascript">
@@ -133,13 +163,24 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 			    @$tipocandidato = $_SESSION["tipocandidato"];	
 				 @$logo2 = $_SESSION["logo2"];
 				  @$eslogan = $_SESSION["eslogan"];
+				   @$periodo = $_SESSION["periodo"];
 				   @$votos = $_SESSION["votosprevistos"];
 					@$consulta=$_SESSION["consulta"];	
-					@$mesa=$_SESSION["mesa"];	
+					@$mesa=$_SESSION["MESASASIGNADAS"];	
 					@$usuarioasociado=$_SESSION["usuarioasociado"];
+					@$DEPARTAMENTOSASIGNADOS=$_SESSION["DEPARTAMENTOSASIGNADOS"];			
+					@$PUSTOSASIGNADOS=$_SESSION["PUSTOSASIGNADOS"];	
+					@$MUNICIPIOSASIGNADOS=$_SESSION["MUNICIPIOSASIGNADOS"];	
+
 		if(!empty($usuario)){
 			if(@$usuario != ""){
-				header('Location: registrar_sufragantes.php');	    
+				if(@$consulta==1){
+					header('Location: registrar_miembros.php');	    
+				}elseif(@$consulta==0){
+					header('Location: diad_electoral.php');	    
+				}elseif(@$consulta==4){
+						header('Location: informe_municipal.php');	    
+				}
 			}
 		}
 	}

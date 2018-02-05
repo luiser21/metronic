@@ -1,13 +1,18 @@
-<?php
+<?php 
 date_default_timezone_set('America/Bogota');
-
-//if(date('H')>16 && date('d')==25){
+if(date('H')>16 && date('d')==25){
+header("Location: table_editable.php");
+} 
 header('Content-Type: text/html; charset=ISO-8859-1'); 
 	session_start();
+	
     include_once "includes/GestionBD.new.class.php";
-
+	
+	
 	$DBGestion = new GestionBD('AGENDAMIENTO');	
+	
 	// Si la sesion no est? activa y/o autenticada ingresa a este paso
+	//imprimir($_SESSION);
 	if (!isset($_SESSION["active"]) == 1)
 	{
 		header("location:logout.php");
@@ -25,33 +30,46 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 		}
 		
 	}
+?>
+<?php 
 
 $add = (isset($_GET['add']) ? $_GET['add'] : 0); ;
 
 
 if($add == 1){
 
-    @$puesto=(isset($_POST['puesto']) ? $_POST['puesto'] : 0);  
-    @$movilizados=(isset($_POST['movilizados']) ? $_POST['movilizados'] : 0);	  	 
-	try{		
-		$sql="UPDATE boletines_departamentos set MOVILIZADOS='".$movilizados."',ESTADO=0, USUMODIFICA=".$_SESSION['username']." 
-				WHERE candidato=".$_SESSION['idcandidato']." and IDPUESTO='".$puesto."' and IDBOLETIN=(SELECT ID FROM BOLETINES WHERE ESTADO=1)";		
-		@$DBGestion->Consulta($sql);	
-		$sql="UPDATE BOLETINES set MOVILIZADOS=MOVILIZADOS+'".$movilizados."'
-				WHERE candidato=".$_SESSION['idcandidato']." and  ESTADO=1 ";			
-		@$DBGestion->Consulta($sql);					
+    @$puesto=(isset($_POST['puestos']) ? $_POST['puestos'] : 0);  
+    @$mesas=(isset($_POST['mesas']) ? $_POST['mesas'] : 0);
+    @$sufragantes=(isset($_POST['sufragantes']) ? $_POST['sufragantes'] : 0);	  	 
+	$puestoreg=1;	
+	if($puestoreg=='1'){
+		
+			
+			$sql="SELECT MESA from mesas where ID=".$mesas;			
+			$DBGestion->ConsultaArray($sql);				
+			$mesa=$DBGestion->datos;				
+			 foreach ($mesa as $datos2){
+				 $mesa1 =$datos2['MESA'];				 
+			}	
+			 $sql="UPDATE boletines_departamentos set MOVILIZADOS='".$sufragantes."', META=1
+				    WHERE candidato=".$_SESSION['idcandidato']." and encargado='".$_SESSION['usuarioasociado']."' and zona='MESA ".$mesa1."'";	
+			
+			$DBGestion->Consulta($sql);	
+			 $sql="UPDATE boletines set MOVILIZADOS=MOVILIZADOS+'".$sufragantes."'
+				    WHERE candidato=".$_SESSION['idcandidato']." and hora_real=".date('H');	
+			
+			$DBGestion->Consulta($sql);					
 	 ?>
        	 <script language="javascript">
-	       	 alert("Se ingreso los movilizados exitosamente"); 
-	       	 window.location="registrar_miembros.php";
+	       	 alert("Se ingreso los sufragantes exitosamente"); 
+	       	 window.location="registrar_sufragantes.php";
        	 </script>
 	   <?php	
-	}catch(Exception $e){
-		
+	}else{
 		 ?>
        	 <script language="javascript">
-	       	alert("Hubo un Problema <?  echo 'Excepción capturada: '.$e->getMessage()."\n"; ?>"); 
-	       	window.location="registrar_miembros.php";
+	       	alert("Hubo un Problema); 
+	       	window.location="registrar_sufragantes.php";
        	 </script>
 	   <?php
 	}
@@ -59,25 +77,36 @@ if($add == 1){
 ?>
 <script type="text/javascript">
 
+function mesa(){
+	var pagina= "Ajax_mesa_votacion.php";
+	var capa = "capa_mesas";
+	var puesto = document.getElementById('puestos').value;
+	var valores = 'puesto=' + puesto + '&' + Math.random();
+	if(puesto!=''){ 			
+	    FAjax (pagina,capa,valores,'POST',true)     	 
+	}
+}
+
 function mesa_votos(){
 	var pagina= "Ajax_mesa_votacion_sufragantes.php";
 	var capa = "capa_mesas_votos";
-	var puesto = document.getElementById('puesto').value;
-	var valores = 'puesto=' + puesto + '&' + Math.random();
+	var puesto = document.getElementById('mesas').value;
+	var valores = 'mesas=' + puesto + '&' + Math.random();
 	FAjax (pagina,capa,valores,'POST',true)     	 
 }
 
 function guardar(){
 	
-	var sufragante = parseFloat($("#movilizados").val());
+	var sufragante = parseFloat($("#sufragantes").val());
 	if(sufragante==0){
-		alert("Movilizados no puede ser cero");		
+		alert("Sufragantes no puede ser cero");		
 		return false;
 	}else{
 		return true;
 	}
 	
 }
+
 </script>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -109,24 +138,25 @@ function guardar(){
    <link rel="stylesheet" type="text/css" href="assets/bootstrap-daterangepicker/daterangepicker.css" />
    <link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" />
    <link rel="shortcut icon" href="images/favicon(2).ico" />
-	<script type="text/javascript" src="js/FAjax.js"></script>
+   <script type="text/javascript" src="js/FAjax.js"></script>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="fixed-top">
-   <!-- BEGIN HEADER -->
-   <div class="header navbar navbar-inverse navbar-fixed-top">
-      <!-- BEGIN TOP NAVIGATION BAR -->
-      <div class="navbar-inner">
-         <div class="container-fluid">
-            <!-- BEGIN LOGO -->
-            <img src="images/logo2_movil.png" alt="logo"  width="159" height="108"/>
-           
-            <!-- END LOGO -->
-            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-            <img src="assets/img/menu-toggler.png" alt="" />
-            </a>          
+	<!-- BEGIN HEADER -->
+	<div class="header navbar navbar-inverse navbar-fixed-top">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<!-- BEGIN LOGO -->
+				<a class="brand" href="index.html">
+			<img src="images/logo2_movil.png" alt="logo"  width="159" height="108"/>
+				</a>
+				<!-- END LOGO -->
+				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+				<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+				<img src="assets/img/menu-toggler.png" alt="" />
+				</a>          
             <!-- END RESPONSIVE MENU TOGGLER -->            
             <!-- BEGIN TOP NAVIGATION MENU -->              
             <ul class="nav pull-right">
@@ -155,15 +185,15 @@ function guardar(){
                   <ul class="dropdown-menu">
                     
                      <li><a href="logout.php"><i class="icon-key"></i>Cerrar Session</a></li>
-                  </ul>
-               </li>
-               <!-- END USER LOGIN DROPDOWN -->
-            </ul>
-            <!-- END TOP NAVIGATION MENU --> 
-         </div>
-      </div>
-      <!-- END TOP NAVIGATION BAR -->
-   </div>
+              </ul>
+					</li>
+					<!-- END USER LOGIN DROPDOWN -->
+				</ul>
+				<!-- END TOP NAVIGATION MENU -->	
+			</div>
+		</div>
+		<!-- END TOP NAVIGATION BAR -->
+	</div>
    <!-- END HEADER -->
    <!-- BEGIN CONTAINER -->
    <div class="page-container row-fluid">
@@ -176,27 +206,29 @@ function guardar(){
                <div class="sidebar-toggler hidden-phone"></div>
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li> 
-            
-            <li class="active has-sub ">
+             <? 
+				  if($_SESSION['consulta']==1){
+				  ?>
+            <li class="has-sub ">
                <a href="javascript:;">
                <i class="icon-table"></i> 
-               <span class="title">Informes</span>
-               <span class="selected"></span>
-               <span class="arrow open"></span>
+               <span class="title">Informes</span>			   
+					<span class="arrow "></span>
                </a>
                <ul class="sub">
                   <li class="active"><a href="registrar_miembros.php">Registrar Simpatizante</a></li>
                  
                </ul>
             </li>  
-			<? if($_SESSION['consulta']==0){?>
-			<li class="">
+			 <? }?>	
+			<li class="active has-sub">
 					<a href="diad_electoral.php">
 					<i class="icon-calendar"></i> 
 					<span class="title">Dia Electoral</span>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
 					</a>
-				</li>
-			<? }?>				
+				</li>			
             <li class="">
                <a href="logout.php">
                <i class="icon-user"></i> 
@@ -226,133 +258,96 @@ function guardar(){
             <div class="row-fluid">
 				<ul class="breadcrumb">
 							<li>
-								<i class="icon-home"></i>
-								Registrar
+								<i class="icon-calendar"></i>
+								Dia Electoral
 								<i class="icon-angle-right"></i>
 							</li>
-							Simpatizantes</li>
-							<li class="pull-right no-text-shadow">
-								
-							</li>
+
 						</ul>
-               <div class="span12">
-                  <!-- BEGIN VALIDATION STATES-->
-                  <div class="">
-                     <div class="portlet-title">
-                        <h4><i class="icon-reorder"></i><?php echo $_SESSION["tipocandidato"].'  '.$_SESSION["ntarjeton"].'  '.$_SESSION["municipio"].'  '.$_SESSION["periodo"]?></h4>
-                        
-                     </div>
-                     <div class="portlet-body form">
-                        <!-- BEGIN FORM-->
-                        <form action="registrar_miembros.php?add=1" id="form_sample_1" class="form-horizontal" method="post">
-                           <div class="alert alert-error hide">
-                              <button class="close" data-dismiss="alert"></button>
-                              Usted tiene algunos errores de forma. Por favor , consulte más abajo.
-                           </div>
-                           <div class="alert alert-success hide">
-                              <button class="close" data-dismiss="alert"></button>
-                             Su validación de formularios es un éxito!
-                           </div>
-						    <div class="control-group">
-                              <label class="control-label">Departamentos<span class="required">*</span></label>
-                              <div class="controls">
-							                                    <?php 
-				$sql="SELECT DISTINCT DEP.IDDEPARTAMENTO, DEP.NOMBRE FROM 
-puestos_votacion PV
-INNER JOIN municipios MUN ON MUN.ID=PV.IDMUNICIPIO
-INNER JOIN departamentos DEP ON DEP.IDDEPARTAMENTO=MUN.IDDEPARTAMENTO
-WHERE PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")";
-				$DBGestion->ConsultaArray($sql);
-				
-				$departamentos=$DBGestion->datos;
-				
-		
-		?>
-                               <select class="span6 m-wrap; required" name="departamentos" id="departamentos">
-						<? if(count($departamentos)>1){ ?>
-						<option value="">Seleccione....</option>
-						<? } ?>
-                        <?php
-						foreach ($departamentos as $datos){
-							 $id = $datos['IDDEPARTAMENTO'];
-							 $nombre = $datos['NOMBRE'];
-							 
-							  			 
-				?>
-						<option value="<?php echo $id?>"><?php echo $nombre?></option>
-						<?php } ?>
-                                 </select>                               
-                              </div>
-                           </div>
-						     <div class="control-group">
-                              <label class="control-label">Municipios<span class="required">*</span></label>
-                             <div class="controls">
-							      <?php 
-				$sql="SELECT DISTINCT MUN.ID AS IDMUNICIPIO, MUN.NOMBRE FROM 
-puestos_votacion PV
-INNER JOIN municipios MUN ON MUN.ID=PV.IDMUNICIPIO
-INNER JOIN departamentos DEP ON DEP.IDDEPARTAMENTO=MUN.IDDEPARTAMENTO
-WHERE PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")";
-				$DBGestion->ConsultaArray($sql);
-				
-				$municipios=$DBGestion->datos;
-				
-		
-		?>
-		
-                               <select class="span6 m-wrap; required" name="municipios" id="municipios">
-						<? if(count($municipios)>1){ ?>
-						<option value="">Seleccione....</option>
-						<? } ?> 
-                        <?php
-						foreach ($municipios as $datos){
-							 $id = $datos['IDMUNICIPIO'];
-							 $nombre = $datos['NOMBRE'];
-							 
-							  			 
-				?>
-						<option value="<?php echo $id?>"><?php echo $nombre?></option>
-						<?php } ?>
-                                 </select>     
-                              </div>
-                           </div>
-                           <div class="control-group">
-                              <label class="control-label">Puestos de Votaci&oacute;n<span class="required">*</span></label>
-                              <div class="controls">
-                               <?php 
-				$sql="SELECT DISTINCT PV.IDPUESTO,PV.NOMBRE_PUESTO FROM 
-puestos_votacion PV
-INNER JOIN municipios MUN ON MUN.ID=PV.IDMUNICIPIO
-INNER JOIN departamentos DEP ON DEP.IDDEPARTAMENTO=MUN.IDDEPARTAMENTO
-WHERE PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")";
-				$DBGestion->ConsultaArray($sql);
-				
-				$puestos=$DBGestion->datos;
-				
-		
-		?>
-		
-                               <select class="span6 m-wrap; required" name="puesto" id="puesto" onclick="mesa_votos()">
-					
-						<option value="">Seleccione....</option>
-						
-                        <?php
-						foreach ($puestos as $datos){
-							 $id = $datos['IDPUESTO'];
-							 $nombre = $datos['NOMBRE_PUESTO'];
-							 
-							  			 
-				?>
-						<option value="<?php echo $id?>"><?php echo $nombre?></option>
-						<?php } ?>
-                                 </select>     
-                              </div>
-                           </div>
-						   <span id="capa_mesas_votos">							
-							</span>	
-                                               
-                           
-                        </form>
+              
+						<div id="dashboard">
+					<!-- BEGIN DASHBOARD STATS -->
+					<div class="row-fluid">
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+							<div class="dashboard-stat blue">
+								<div class="visual">
+									<i class="icon-bar-chart"></i>
+								</div>
+								<div class="details">
+									<div class="number">
+										<?php 
+
+$sql="SELECT sum(COMPROMISO) as COMPROMISO FROM compromisos_candidato WHERE USUARIO='".$_SESSION["usuarioasociado"]."'";
+	
+$DBGestion->ConsultaArray($sql);
+$compromiso=$DBGestion->datos;	
+echo number_format( $compromiso[0]['COMPROMISO'], 0, ',', ',')  ;	
+										?>
+									</div>
+									<div class="desc">									
+										Votos Compromiso
+									</div>
+								</div>
+								<a class="more" href="#">
+								Ver mas <i class="m-icon-swapright m-icon-white"></i>
+								</a>						
+							</div>
+						</div>
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+							<div class="dashboard-stat green">
+								<div class="visual">
+									<i class="icon-shopping-cart"></i>
+								</div>
+								<div class="details">
+									<div class="number">
+									<?php
+$sql="SELECT sum(MOVILIZADOS) as MOVILIZADOS FROM boletines_departamentos WHERE CANDIDATO=223";	
+$DBGestion->ConsultaArray($sql);
+$movilizados=$DBGestion->datos;	
+echo number_format( $movilizados[0]['MOVILIZADOS'], 0, ',', ',')  ;	
+
+									?>
+									</div>
+									<div class="desc">Votos Movilizados</div>
+								</div>
+								<a class="more" href="#">
+								Ver mas <i class="m-icon-swapright m-icon-white"></i>
+								</a>						
+							</div>
+						</div>
+						<div class="span3 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
+							<div class="dashboard-stat purple">
+								<div class="visual">
+									<i class="icon-globe"></i>
+								</div>
+								<div class="details">
+									<div class="number"><?php
+									
+									echo '+'.number_format(($movilizados[0]['MOVILIZADOS']/$compromiso[0]['COMPROMISO'])*100, 2, ',', ',').'%';
+									
+									?></div>
+									<div class="desc">% Cumplimiento</div>
+								</div>
+								<a class="more" href="#">
+								Ver mas <i class="m-icon-swapright m-icon-white"></i>
+								</a>						
+							</div>
+						</div>
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+							<div class="dashboard-stat yellow">
+								<div class="visual">
+									<i class="icon-bar-chart"></i>
+								</div>
+								<div class="details">
+									<div class="number">6,000</div>
+									<div class="desc">Puestos Votacion</div>
+								</div>
+								<a class="more" href="#">
+								Ver mas <i class="m-icon-swapright m-icon-white"></i>
+								</a>						
+							</div>
+						</div>
+					</div>
                         <!-- END FORM-->
                      </div>
                   </div>
