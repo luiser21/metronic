@@ -207,7 +207,8 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 									<? 
 									
 $sql="SELECT MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
-INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO 
+INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
+INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
  WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
 ORDER BY MOVILIZADOS ASC ";
 				$DBGestion->ConsultaArray($sql);				
@@ -223,7 +224,10 @@ ORDER BY MOVILIZADOS ASC ";
 										<tr class="odd gradeX">											
 											<td><? echo $nombre?></td>
 											<td class="hidden-480"><? echo number_format($movilizados, 0, ',', ',')?></td>								
-											<td ><span class="label label-success">Approved</span></td>
+											<td ><?if($movilizados>50){ ?> 
+														<span class="label label-success">Aprobado</span> <? }else{ ?> 
+														<span class="label label-warning">No Reportado</span><? } ?>
+											</td>
 										</tr>
 										<?php } ?>
 									</tbody>
@@ -232,7 +236,159 @@ ORDER BY MOVILIZADOS ASC ";
 						</div>
 						<!-- END EXAMPLE TABLE PORTLET-->
 					</div>
-				
+				<div class="row-fluid">
+					<div class="span6 responsive" data-tablet="span12 fix-offset" data-desktop="span6">
+						<!-- BEGIN EXAMPLE TABLE PORTLET-->
+						<div class="portlet box grey">
+							<div class="portlet-title">
+								<h4><i class="icon-user"></i>Puestos de Votaci&oacute;n Movilizados</h4>
+								
+							</div>
+							<div class="portlet-body">
+								<table class="table table-striped table-bordered table-hover" id="sample_2">
+									<thead>
+										<tr>											
+											<th>Puestos de Votaci&oacute;n</th>
+											<th class="hidden-480">Municipio</th>
+											<th class="hidden-480">Movilizados</th>
+										</tr>
+									</thead>
+									<tbody>
+										<? 
+									
+$sql="SELECT PV.NOMBRE_PUESTO, MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
+INNER JOIN puestos_votacion PV ON PV.IDPUESTO=BP.IDPUESTO
+INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
+INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
+ WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
+GROUP BY BP.IDPUESTO
+ORDER BY MOVILIZADOS DESC";
+				$DBGestion->ConsultaArray($sql);				
+				$municipios=$DBGestion->datos;
+									;
+									
+						foreach ($municipios as $datos){
+							 $movilizados = $datos['MOVILIZADOS'];
+							 $nombre = $datos['NOMBRE_PUESTO'];
+							 $municipio=$datos['NOMBRE']; 
+							 
+							  			 
+				?>				
+										<tr class="odd gradeX">
+											<td><? echo $nombre?></td>
+											<td class="hidden-480"><? echo $municipio?></td>
+											<td class="hidden-480"><? echo number_format($movilizados, 0, ',', ',')?></td>								
+											<td ><?if($movilizados>50){ ?> 
+														<span class="label label-success">Aprobado</span> <? }else{ ?> 
+														<span class="label label-warning">No Reportado</span><? } ?>
+											</td>
+										</tr>
+						<? } ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- END EXAMPLE TABLE PORTLET-->
+					</div>
+					<div class="span6 responsive" data-tablet="span12 fix-offset" data-desktop="span6">
+						<!-- BEGIN EXAMPLE TABLE PORTLET-->
+						<div class="portlet box purple">
+							<div class="portlet-title">
+								<h4><i class="icon-cogs"></i>Table</h4>
+								<div class="actions">
+									<a href="#" class="btn green"><i class="icon-plus"></i> Add</a>
+									<a href="#" class="btn yellow"><i class="icon-print"></i> Print</a>
+								</div>
+							</div>
+							<div class="portlet-body">
+								<table class="table table-striped table-bordered table-hover" id="sample_3">
+									<thead>
+										<tr>
+											<th style="width:8px;"><input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" /></th>
+											<th>Username</th>
+											<th class="hidden-480">Email</th>
+											<th class="hidden-480">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>shuxer</td>
+											<td class="hidden-480"><a href="mailto:shuxer@gmail.com">shuxer@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>looper</td>
+											<td class="hidden-480"><a href="mailto:looper90@gmail.com">looper90@gmail.com</a></td>
+											<td><span class="label label-warning">Suspended</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>userwow</td>
+											<td class="hidden-480"><a href="mailto:userwow@yahoo.com">userwow@yahoo.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>user1wow</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">userwow@gmail.com</a></td>
+											<td><span class="label label-inverse">Blocked</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>restest</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">test@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>foopl</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">good@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>weep</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">good@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>coop</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">good@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>pppol</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">good@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>test</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">good@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>userwow</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">userwow@gmail.com</a></td>
+											<td><span class="label label-inverse">Blocked</span></td>
+										</tr>
+										<tr class="odd gradeX">
+											<td><input type="checkbox" class="checkboxes" value="1" /></td>
+											<td>test</td>
+											<td class="hidden-480"><a href="mailto:userwow@gmail.com">test@gmail.com</a></td>
+											<td><span class="label label-success">Approved</span></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- END EXAMPLE TABLE PORTLET-->
+					</div>
 						
 					<!-- BEGIN DASHBOARD STATS -->
 					    <!-- END FORM-->
@@ -273,6 +429,7 @@ ORDER BY MOVILIZADOS ASC ";
 			App.setPage("table_managed");
 			App.init();
 		});
+		
 	</script>
    <!-- END JAVASCRIPTS -->   
 </body>
