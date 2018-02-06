@@ -318,7 +318,7 @@ WHERE PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")";
                            </div>
                            <div class="control-group">
                               <label class="control-label">Puestos de Votaci&oacute;n<span class="required">*</span></label>
-                              <div class="controls">
+                              <div class="controls"> 
                                <?php 
 				$sql="SELECT DISTINCT PV.IDPUESTO,PV.NOMBRE_PUESTO FROM 
 puestos_votacion PV
