@@ -128,6 +128,8 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						header('Location: diad_electoral.php');	    
 					}elseif(@$consulta==4){
 						header('Location: informe_municipal.php');	    
+					}elseif(@$consulta==5){
+						header('Location: registrar_testigos.php');	    
 					}
 					
 				}else{
@@ -180,6 +182,8 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 					header('Location: diad_electoral.php');	    
 				}elseif(@$consulta==4){
 						header('Location: informe_municipal.php');	    
+				}elseif(@$consulta==5){
+						header('Location: registrar_testigos.php');	    
 				}
 			}
 		}

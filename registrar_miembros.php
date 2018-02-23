@@ -35,9 +35,9 @@ if($add == 1){
     @$movilizados=(isset($_POST['movilizados']) ? $_POST['movilizados'] : 0);	  	 
 	try{		
 		$sql="UPDATE boletines_departamentos set MOVILIZADOS='".$movilizados."',ESTADO=0, USUMODIFICA=".$_SESSION['username']." 
-				WHERE candidato=".$_SESSION['idcandidato']." and IDPUESTO='".$puesto."' and IDBOLETIN=(SELECT ID FROM BOLETINES WHERE ESTADO=1)";		
+				WHERE candidato=".$_SESSION['idcandidato']." and IDPUESTO='".$puesto."' and IDBOLETIN=(SELECT ID FROM boletines WHERE ESTADO=1)";		
 		@$DBGestion->Consulta($sql);	
-		$sql="UPDATE BOLETINES set MOVILIZADOS=MOVILIZADOS+'".$movilizados."'
+		$sql="UPDATE boletines set MOVILIZADOS=MOVILIZADOS+'".$movilizados."'
 				WHERE candidato=".$_SESSION['idcandidato']." and  ESTADO=1 ";			
 		@$DBGestion->Consulta($sql);					
 	 ?>
