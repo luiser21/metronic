@@ -228,7 +228,18 @@ function guardar(){
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					</a>
-				</li>			
+				</li>
+			 <li class="has-sub ">
+               <a href="javascript:;">
+               <i class="icon-table"></i> 
+               <span class="title">Informes</span>
+               <span class="arrow"></span>
+               </a>
+               <ul class="sub">
+                  <li class="active"><a href="informe_testigos.php">Informes Testigos</a></li>
+                 
+               </ul>
+            </li>  
             <li class="">
                <a href="logout.php">
                <i class="icon-user"></i> 

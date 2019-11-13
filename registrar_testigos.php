@@ -39,16 +39,31 @@ if($add == 1){
     @$votosnulos=(isset($_POST['votosnulos']) ? $_POST['votosnulos'] : 0);	  	 
 	@$votosnomarcados=(isset($_POST['votosnomarcados']) ? $_POST['votosnomarcados'] : 0);  
     @$votosenblanco=(isset($_POST['votosenblanco']) ? $_POST['votosenblanco'] : 0);	  	 
-	@$observacion=(isset($_POST['observacion']) ? $_POST['observacion'] : 0);   	 
+	@$observacion=(isset($_POST['observacion']) ? $_POST['observacion'] : 0);   
+@$votoscandidato1=(isset($_POST['votoscandidato1']) ? $_POST['votoscandidato1'] : 0);  
+@$votoscandidato2=(isset($_POST['votoscandidato2']) ? $_POST['votoscandidato2'] : 0);  
+@$votoscandidato3=(isset($_POST['votoscandidato3']) ? $_POST['votoscandidato3'] : 0);  
+@$votoscandidato4=(isset($_POST['votoscandidato4']) ? $_POST['votoscandidato4'] : 0);  
+@$votoscandidato5=(isset($_POST['votoscandidato5']) ? $_POST['votoscandidato5'] : 0);  
+@$votoscandidato6=(isset($_POST['votoscandidato6']) ? $_POST['votoscandidato6'] : 0);  
+@$votoscandidato7=(isset($_POST['votoscandidato7']) ? $_POST['votoscandidato7'] : 0);  
+@$votoscandidato8=(isset($_POST['votoscandidato8']) ? $_POST['votoscandidato8'] : 0);  
 	try{		
 		$sql="UPDATE mesas_testigo set 
 				TOTALMESA=".$totalmesa.",
-				VOTOPARTIDO=".$votospartido.",
+			
 				VOTOS_BLANCO=".$votosenblanco.",
 				VOTOS_NULOS=".$votosnulos.",
 				VOTOS_NO_MARCADOS=".$votosnomarcados.",
 				OBSERVACIONES='".$observacion."',
-				VOTOS_CANDIDATOS=".$votoscandidado."
+				votoscandidato1=".$votoscandidato1.",
+				votoscandidato2=".$votoscandidato2.",
+				votoscandidato3=".$votoscandidato3.",
+				votoscandidato4=".$votoscandidato4.",
+				votoscandidato5=".$votoscandidato5.",
+				votoscandidato6=".$votoscandidato6.",
+				votoscandidato7=".$votoscandidato7.",
+				votoscandidato8=".$votoscandidato8."
 				WHERE 				
 				IDCANDIDATO=".$_SESSION['idcandidato']." and IDPUESTO=".$puesto." and ID=".$mesa." and IDTESTIGO='".$_SESSION['usuarioasociado']."'";		
 		$DBGestion->Consulta($sql);	

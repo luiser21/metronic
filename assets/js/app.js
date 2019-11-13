@@ -350,6 +350,7 @@ var App = function () {
         if (!jQuery().fullCalendar) {
             return;
         }
+		
 
         var date = new Date();
         var d = date.getDate();
@@ -360,16 +361,16 @@ var App = function () {
         if ($('#calendar').parents(".portlet").width() <= 720) {
             $('#calendar').addClass("mobile");
             h = {
-                left: 'title, prev,next',
+                left: 'prev,next',
                 center: '',
-                right: 'today,month,agendaWeek,agendaDay'
+                right: ''
             };
         } else {
             $('#calendar').removeClass("mobile");
             h = {
-                left: 'title',
+                left: '',
                 center: '',
-                right: 'prev,next,today,month,agendaWeek,agendaDay'
+                right: 'prev,next'
             };
         }
 
@@ -407,17 +408,34 @@ var App = function () {
 
         //predefined events
         $('#event_box').html("");
-        addEvent("My Event 1");
-        addEvent("My Event 2");
-        addEvent("My Event 3");
-        addEvent("My Event 4");
-        addEvent("My Event 5");
-        addEvent("My Event 6");
-
+        addEvent("PRUEBA POLIGRAFIA");
+	
         $('#calendar').html("");
+		
         $('#calendar').fullCalendar({
             header: h,
+			defaultView: 'agendaWeek',
             editable: true,
+			minTime: '7AM',
+			maxTime:'7PM',
+			defaultEventMinutes:120,
+			displayEventEnd:true,
+			displayEventTime:true,
+			lang: 'es',
+			firstDay: 1,
+			monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthNameShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+			dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles','Jueves', 'Viernes', 'Sabado'],
+			dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+			buttonText: {
+			today: 'hoy',
+			month: 'mes',
+			week: 'semana',
+			day: 'dia',
+			
+
+			},
+
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay) { // this function is called when something is dropped
 
@@ -436,49 +454,22 @@ var App = function () {
                 $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
 
                 // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
+                //if ($('#drop-remove').is(':checked')) {
                     // if so, remove the element from the "Draggable Events" list
                     $(this).remove();
-                }
+                //}
             },
+			 hiddenDays: [ 0 ],
+/*
             events: [{
-                title: 'All Day Event',
-                start: new Date(y, m, 1)
-            }, {
-                title: 'Long Event',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2)
-            }, {
                 id: 999,
                 title: 'Repeating Event',
                 start: new Date(y, m, d - 3, 16, 0),
                 allDay: false
-            }, {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d + 4, 16, 0),
-                allDay: false
-            }, {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false
-            }, {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false
-            }, {
-                title: 'Birthday Party',
-                start: new Date(y, m, d + 1, 19, 0),
-                end: new Date(y, m, d + 1, 22, 30),
-                allDay: false
-            }, {
-                title: 'Click for Google',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                url: 'http://google.com/'
-            }]
+				
+            }]*/
         });
+		
 
     }
 

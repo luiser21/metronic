@@ -257,7 +257,7 @@ function guardar(){
                               <label class="control-label">Departamentos<span class="required">*</span></label>
                               <div class="controls">
 							                                    <?php 
-				$sql="SELECT DISTINCT DEP.IDDEPARTAMENTO, DEP.NOMBRE FROM 
+			echo	$sql="SELECT DISTINCT DEP.IDDEPARTAMENTO, DEP.NOMBRE FROM 
 puestos_votacion PV
 INNER JOIN municipios MUN ON MUN.ID=PV.IDMUNICIPIO
 INNER JOIN departamentos DEP ON DEP.IDDEPARTAMENTO=MUN.IDDEPARTAMENTO

@@ -130,6 +130,8 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						header('Location: informe_municipal.php');	    
 					}elseif(@$consulta==5){
 						header('Location: registrar_testigos.php');	    
+					}elseif(@$consulta==2){
+						header('Location: consulta_puesto_rector.php');	    
 					}
 					
 				}else{
@@ -184,6 +186,8 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						header('Location: informe_municipal.php');	    
 				}elseif(@$consulta==5){
 						header('Location: registrar_testigos.php');	    
+				}elseif(@$consulta==2){
+						header('Location: consulta_puesto_rector.php');	    
 				}
 			}
 		}

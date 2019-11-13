@@ -25,14 +25,14 @@ class GestionBD{
 	public $Error;
 
 	public function GestionBD($TipoDB, $database = ""){
-		$this->servidor = "198.71.235.68";
+		$this->servidor = "sql137.main-hosting.eu";
 		//$this->servidor = "127.0.0.1";
-		$this->usuario = "user-sige";
 		//$this->usuario = "root";
+		$this->usuario = "u504621598_elect";
 		$this->basedatos = "";
-		$this->db = "w3w4e4";
 		//$this->db = "electoral";
-		$this->pass = "Consuelo81";
+		$this->db = "u504621598_elect";
+		$this->pass = "1qiq9A4gBF0T";
 		//$this->pass = "";
 		$this->datos = array();
 		$this->filas = array();
@@ -57,12 +57,12 @@ class GestionBD{
 			$BasesDatos = XML2Array(BASESDEDATOS);
 		//date_default_timezone_set('America/Bogota');		
 				$this->basedatos = 'MYSQL';
-				$this->servidor = '198.71.235.68';
-				$this->usuario = 'user-sige';
-				$this->pass = 'Consuelo81';	
+				$this->servidor = 'sql137.main-hosting.eu';
+				//$this->usuario = 'user-sige';
+				//$this->pass = 'Consuelo81';	
 				//$this->servidor = '127.0.0.1';
-				//$this->usuario = 'root';
-				//$this->pass = '';	
+				$this->usuario = 'u504621598_elect';
+				$this->pass = '1qiq9A4gBF0T';	
 			
 		}
 	protected function InicializarBD($TipoDB, $db = ""){
@@ -73,18 +73,18 @@ class GestionBD{
 		$err ='';
 		//imprimir($this);
 		set_time_limit(0);
-		$this->db = 'w3w4e4';
-		//$this->db = 'electoral';
+		//$this->db = 'w3w4e4';
+		$this->db = 'u504621598_elect';
 			switch ($this->basedatos)
 			{
 				case "MYSQL":
-					if(!$this->IdConexion = @mysql_connect($this->servidor,$this->usuario,$this->pass)){
-						//$err = OCIError();
+					if(!$this->IdConexion = mysql_connect($this->servidor,$this->usuario,$this->pass)){
+						//$err =''//= OCIError();
 						throw new Exception('CONEXION MYSQL NO DISPONIBLE, FAVOR CONSULTAR CON EL ADMINISTRADOR DEL SISTEMA.. | '.$err['message']. ' | Inicializando | '. $this->Ultima_Consulta );
 						echo $this->Ultima_Consulta;
 					}
 
-					if(!@mysql_select_db($this->db,$this->IdConexion)){
+					if(!mysql_select_db($this->db,$this->IdConexion)){
 						//$err = OCIError();
 						throw new Exception('CONEXION A LA BASE '.$this->db.' EN MYSQL NO DISPONIBLE, FAVOR CONSULTAR CON EL ADMINISTRADOR DEL SISTEMA.. | '.$err['message']. ' | Inicializando | '. $this->Ultima_Consulta );
 						echo $this->Ultima_Consulta;
