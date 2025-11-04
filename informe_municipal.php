@@ -204,10 +204,10 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 										</tr>
 									</thead>
 									<tbody>
-									<? 
-									
+									<?php
+
 $sql="SELECT MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
-INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
+INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION['MUNICIPIOSASIGNADOS'].")
 INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
  WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
  GROUP BY MUN.NOMBRE

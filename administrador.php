@@ -12,7 +12,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 			$mesa=0;
             if(@$usuario != ""){
 				$password=Hash::calcSHA($password);	
-				$sql="SELECT
+				echo $sql="SELECT
 						usuario.USUARIO,
 						usuario.CONSULTA,				
 						usuario.ASOSIADO,
@@ -22,6 +22,7 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						usuario.DEPARTAMENTOS AS DEPARTAMENTOSASIGNADOS,
 						usuario.MUNICIPAL AS MUNICIPIOSASIGNADOS
 						FROM usuario WHERE USUARIO = '".$usuario."' and CONTRASENA ='".$password."' and ACTIVO = 'Y'";				
+				//exit;
 				$DBGestion->ConsultaArray($sql);
 				$usuario_consulta=$DBGestion->datos;				
 				foreach (@$usuario_consulta as $datos2){
@@ -130,8 +131,6 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						header('Location: informe_municipal.php');	    
 					}elseif(@$consulta==5){
 						header('Location: registrar_testigos.php');	    
-					}elseif(@$consulta==2){
-						header('Location: consulta_puesto_rector.php');	    
 					}
 					
 				}else{
@@ -186,8 +185,6 @@ $DBGestion = new GestionBD('AGENDAMIENTO');
 						header('Location: informe_municipal.php');	    
 				}elseif(@$consulta==5){
 						header('Location: registrar_testigos.php');	    
-				}elseif(@$consulta==2){
-						header('Location: consulta_puesto_rector.php');	    
 				}
 			}
 		}

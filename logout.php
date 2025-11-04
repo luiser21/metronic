@@ -5,5 +5,5 @@ session_start();
 $_SESSION = array();
 // destruirla
 session_destroy();
-header("location:index.html");
+header("location:login.html");
  ?>

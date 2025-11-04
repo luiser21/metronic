@@ -30,59 +30,63 @@ $add = (isset($_GET['add']) ? $_GET['add'] : 0); ;
 
 
 if($add == 1){
-	
+    
     @$puesto=(isset($_POST['puesto']) ? $_POST['puesto'] : 0);  
     @$mesa=(isset($_POST['mesas']) ? $_POST['mesas'] : 0);	  	 
-	@$totalmesa=(isset($_POST['totalmesa']) ? $_POST['totalmesa'] : 0);  
+    @$totalmesa=(isset($_POST['totalmesa']) ? $_POST['totalmesa'] : 0);  
     @$votospartido=(isset($_POST['votospartido']) ? $_POST['votospartido'] : 0);	  	 
-	@$votoscandidado=(isset($_POST['votoscandidado']) ? $_POST['votoscandidado'] : 0);  
+    @$votoscandidado=(isset($_POST['votoscandidado']) ? $_POST['votoscandidado'] : 0);  
     @$votosnulos=(isset($_POST['votosnulos']) ? $_POST['votosnulos'] : 0);	  	 
-	@$votosnomarcados=(isset($_POST['votosnomarcados']) ? $_POST['votosnomarcados'] : 0);  
+    @$votosnomarcados=(isset($_POST['votosnomarcados']) ? $_POST['votosnomarcados'] : 0);  
     @$votosenblanco=(isset($_POST['votosenblanco']) ? $_POST['votosenblanco'] : 0);	  	 
-	@$observacion=(isset($_POST['observacion']) ? $_POST['observacion'] : 0);   
-@$votoscandidato1=(isset($_POST['votoscandidato1']) ? $_POST['votoscandidato1'] : 0);  
-@$votoscandidato2=(isset($_POST['votoscandidato2']) ? $_POST['votoscandidato2'] : 0);  
-@$votoscandidato3=(isset($_POST['votoscandidato3']) ? $_POST['votoscandidato3'] : 0);  
-@$votoscandidato4=(isset($_POST['votoscandidato4']) ? $_POST['votoscandidato4'] : 0);  
-@$votoscandidato5=(isset($_POST['votoscandidato5']) ? $_POST['votoscandidato5'] : 0);  
-@$votoscandidato6=(isset($_POST['votoscandidato6']) ? $_POST['votoscandidato6'] : 0);  
-@$votoscandidato7=(isset($_POST['votoscandidato7']) ? $_POST['votoscandidato7'] : 0);  
-@$votoscandidato8=(isset($_POST['votoscandidato8']) ? $_POST['votoscandidato8'] : 0);  
-	try{		
-		$sql="UPDATE mesas_testigo set 
-				TOTALMESA=".$totalmesa.",
-			
-				VOTOS_BLANCO=".$votosenblanco.",
-				VOTOS_NULOS=".$votosnulos.",
-				VOTOS_NO_MARCADOS=".$votosnomarcados.",
-				OBSERVACIONES='".$observacion."',
-				votoscandidato1=".$votoscandidato1.",
-				votoscandidato2=".$votoscandidato2.",
-				votoscandidato3=".$votoscandidato3.",
-				votoscandidato4=".$votoscandidato4.",
-				votoscandidato5=".$votoscandidato5.",
-				votoscandidato6=".$votoscandidato6.",
-				votoscandidato7=".$votoscandidato7.",
-				votoscandidato8=".$votoscandidato8."
-				WHERE 				
-				IDCANDIDATO=".$_SESSION['idcandidato']." and IDPUESTO=".$puesto." and ID=".$mesa." and IDTESTIGO='".$_SESSION['usuarioasociado']."'";		
-		$DBGestion->Consulta($sql);	
-		//exit;			
-	 ?>
-       	 <script language="javascript">
-	       	 alert("Se ingreso los votos exitosamente"); 
-	       	 window.location="registrar_testigos.php";
-       	 </script>
-	   <?php	
-	}catch(Exception $e){
-		
-		 ?>
-       	 <script language="javascript">
-	       	alert("Hubo un Problema <?  echo 'Excepción capturada: '.$e->getMessage()."\n"; ?>"); 
-	       	window.location="registrar_miembros.php";
-       	 </script>
-	   <?php
-	}
+    @$observacion=(isset($_POST['observacion']) ? $_POST['observacion'] : 0);   	 
+
+    // leer NF000..NF010 enviados desde el formulario AJAX (si vienen)
+    $nf = [];
+    for($k=0;$k<=10;$k++){
+        $key = 'nf' . str_pad($k,3,'0',STR_PAD_LEFT); // nf000 .. nf010
+        $nf[$key] = isset($_POST[$key]) ? intval($_POST[$key]) : 0;
+    }
+
+    try{		
+        // Construir UPDATE incluyendo NF000..NF010; NF000 -> VOTOPARTIDO, NF001 -> VOTOS_CANDIDATOS
+        $sets = [];
+        $sets[] = "TOTALMESA = " . intval($totalmesa);
+        $sets[] = "VOTOPARTIDO = " . intval($nf['nf000']); // NF000
+        $sets[] = "VOTOS_CANDIDATOS = " . intval($nf['nf001']); // NF001
+        $sets[] = "VOTOS_BLANCO = " . intval($votosenblanco);
+        $sets[] = "VOTOS_NULOS = " . intval($votosnulos);
+        $sets[] = "VOTOS_NO_MARCADOS = " . intval($votosnomarcados);
+        $sets[] = "OBSERVACIONES = '" . addslashes($observacion) . "'";
+
+        // agregar columnas NF000..NF010 (asegurar que existan en la tabla)
+        foreach($nf as $col => $val){
+            $sets[] = strtoupper($col) . " = " . intval($val);
+        }
+
+        $sql = "UPDATE mesas_testigo SET " . implode(", ", $sets) . "
+                WHERE IDCANDIDATO = " . intval($_SESSION['idcandidato']) . "
+                  AND IDPUESTO = " . intval($puesto) . "
+                  AND ID = " . intval($mesa) . "
+                  AND IDTESTIGO = '" . addslashes($_SESSION['usuarioasociado']) . "'";
+
+        $DBGestion->Consulta($sql);	
+     ?>
+            <script language="javascript">
+           	 alert("Se ingresaron los votos exitosamente"); 
+           	 window.location="registrar_testigos.php";
+            </script>
+       <?php	
+    }catch(Exception $e){
+        
+         ?>
+            <script language="javascript">           	
+            let mensajeError = "<?php echo addslashes('ExcepciÃ³n capturada: ' . $e->getMessage()); ?>";
+            alert("Hubo un problema: " + mensajeError);
+           	window.location="registrar_testigos.php";
+            </script>
+       <?php
+    }
 }
 ?>
 <script type="text/javascript">
@@ -268,7 +272,7 @@ function guardar(){
                   <!-- BEGIN VALIDATION STATES-->
                   <div class="">
                      <div class="portlet-title">
-                        <h4><i class="icon-reorder"></i><?php echo $_SESSION["tipocandidato"].'  '.$_SESSION["ntarjeton"].'  '.$_SESSION["municipio"].'  '.$_SESSION["periodo"]?></h4>
+                        <h4><i class="icon-reorder"></i><?php echo 'CAMARA  '.$_SESSION["ntarjeton"].'  '.$_SESSION["municipio"].'  '.$_SESSION["periodo"]?></h4>
                         
                      </div>
                      <div class="portlet-body form">
@@ -276,11 +280,11 @@ function guardar(){
                         <form action="registrar_testigos.php?add=1" id="form_sample_1" class="form-horizontal" method="post">
                            <div class="alert alert-error hide">
                               <button class="close" data-dismiss="alert"></button>
-                              Usted tiene algunos errores de forma. Por favor , consulte más abajo.
+                              Usted tiene algunos errores de forma. Por favor , consulte mï¿½s abajo.
                            </div>
                            <div class="alert alert-success hide">
                               <button class="close" data-dismiss="alert"></button>
-                             Su validación de formularios es un éxito!
+                             Su validaciï¿½n de formularios es un ï¿½xito!
                            </div>
 						    <div class="control-group">
                               <label class="control-label">Departamentos<span class="required">*</span></label>

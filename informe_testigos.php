@@ -1,5 +1,5 @@
 <?php 
-date_default_timezone_set('America/Bogota');
+//date_default_timezone_set('America/Bogota');
 
 header('Content-Type: text/html; charset=ISO-8859-1'); 
 	session_start();
@@ -206,11 +206,11 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 									<tbody>
 									<? 
 									
-$sql="SELECT MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
+echo $sql="SELECT MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
 INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
 INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
- WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
- GROUP BY MUN.NOMBRE
+WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
+GROUP BY MUN.NOMBRE
 ORDER BY MOVILIZADOS ASC ";
 				$DBGestion->ConsultaArray($sql);				
 				$municipios=$DBGestion->datos;
@@ -261,7 +261,7 @@ $sql="SELECT PV.NOMBRE_PUESTO, MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FR
 INNER JOIN puestos_votacion PV ON PV.IDPUESTO=BP.IDPUESTO
 INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
 INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
- WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
+WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
 GROUP BY BP.IDPUESTO
 ORDER BY MOVILIZADOS DESC";
 				$DBGestion->ConsultaArray($sql);				
@@ -317,7 +317,7 @@ INNER JOIN usuario U ON U.IDUSUARIO=BP.IDLIDER
 INNER JOIN puestos_votacion PV ON PV.IDPUESTO=BP.IDPUESTO AND PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")
 INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
 INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
-WHERE BP.CANDIDATO=(".$_SESSION["idcandidato"].")
+WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
 GROUP BY U.IDUSUARIO";
 				$DBGestion->ConsultaArray($sql);				
 				$municipios=$DBGestion->datos;
