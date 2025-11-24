@@ -153,7 +153,7 @@ function guardar(){
       <div class="navbar-inner">
          <div class="container-fluid">
             <!-- BEGIN LOGO -->
-            <img src="images/logo2_movil.png" alt="logo"  width="159" height="108"/>
+            <img src="images/logo_movil_original.png" alt="logo" width="100" height="68"/>
            
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->

@@ -262,7 +262,7 @@ if ($exportCsv) {
             <div class="span12">
                <div class="portlet box blue">
                   <div class="portlet-title">
-                     <h4><i class="icon-reorder"></i> Monitoreo de carga — candidato <?php echo $candidato;?></h4>
+                     <h4><i class="icon-reorder"></i> Monitoreo de carga candidato <?php echo $candidato;?></h4>
                   </div>
                   <div class="portlet-body">
                       <form class="form-inline filters" method="get">
@@ -310,6 +310,7 @@ if ($exportCsv) {
                         </div>
                       </div>
 
+                      <!-- OCULTO: Resumen por Zona
                       <h4>Resumen por Zona</h4>
                       <div class="table-responsive">
                       <div class="table-scroll">
@@ -351,7 +352,9 @@ if ($exportCsv) {
                       </table>
                       </div>
                       </div>
+                      -->
 
+                      <!-- OCULTO: Detalle por Puesto
                       <h4>Detalle por Puesto</h4>
                       <div class="table-responsive">
                       <div class="table-scroll">
@@ -371,7 +374,7 @@ if ($exportCsv) {
                                <td><?php echo $i;?></td>
                                <td><?php echo htmlspecialchars($p['PUESTO_NOMBRE'] ?: 'Puesto '.$p['IDPUESTO']);?></td>
                                <td><?php echo htmlspecialchars($p['ZONA']);?></td>
-                           
+
                                <td class="col-mesas"><?php echo intval($p['MESAS']);?></td>
                                <td class="col-votopartido"><?php echo intval($p['NF000']);?></td>
                                <td class="col-votoscandidatos"><?php echo intval($p['NF001']);?></td>
@@ -392,6 +395,7 @@ if ($exportCsv) {
                          </tbody>
                        </table>
                        </div>
+                       -->
 
 
                       <!-- TABLA TRANSPOSE: filas = NF000..NF010, columnas = ZONAS -->

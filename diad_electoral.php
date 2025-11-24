@@ -139,6 +139,12 @@ function guardar(){
    <link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" />
    <link rel="shortcut icon" href="images/favicon(2).ico" />
    <script type="text/javascript" src="js/FAjax.js"></script>
+   <style>
+      /* Menu hover rojo para Informes y Simulador */
+      .menu-red:hover { background-color: #c9302c !important; }
+      .menu-red:hover > a { color: #fff !important; }
+      .menu-red:hover .title { color: #fff !important; }
+   </style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -150,7 +156,7 @@ function guardar(){
 			<div class="container-fluid">
 				<!-- BEGIN LOGO -->
 				<a class="brand" href="index.html">
-			<img src="images/logo2_movil.png" alt="logo"  width="159" height="108"/>
+			<img src="images/logo_movil_original.png" alt="logo" width="100" height="68"/>
 				</a>
 				<!-- END LOGO -->
 				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -229,20 +235,23 @@ function guardar(){
 					<span class="arrow open"></span>
 					</a>
 				</li>
-			 <li class="has-sub ">
-               <a href="javascript:;">
-               <i class="icon-table"></i> 
+			 <li class="menu-red">
+               <a href="informe_testigos.php">
+               <i class="icon-table"></i>
                <span class="title">Informes</span>
-               <span class="arrow"></span>
                </a>
-               <ul class="sub">
-                  <li class="active"><a href="informe_testigos.php">Informes Testigos</a></li>
-                 
-               </ul>
-            </li>  
+            </li>
+            <?php if($_SESSION['consulta']==0): ?>
+            <li class="menu-red">
+               <a href="simulador_testigos.php">
+               <i class="icon-signal"></i>
+               <span class="title">Simulador</span>
+               </a>
+            </li>
+            <?php endif; ?>
             <li class="">
                <a href="logout.php">
-               <i class="icon-user"></i> 
+               <i class="icon-user"></i>
                <span class="title">Inicio</span>
                </a>
             </li>

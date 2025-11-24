@@ -341,14 +341,31 @@ foreach($puestos_for_default_mun as $p){
     <meta charset="utf-8">
     <title>Simulador Testigos</title>
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/metro.css" rel="stylesheet" />
+    <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
-    <style>.container{margin-top:20px} .portlet-title h4{margin:0;padding:8px 0}</style>
+    <link href="assets/css/style_responsive.css" rel="stylesheet" />
+    <link href="assets/css/style_default.css" rel="stylesheet" id="style_color" />
+    <link rel="shortcut icon" href="images/favicon(2).ico" />
+    <style>
+      .container{margin-top:20px} .portlet-title h4{margin:0;padding:8px 0}
+      /* Menu hover rojo para Informes y Simulador */
+      .menu-red:hover { background-color: #c9302c !important; }
+      .menu-red:hover > a { color: #fff !important; }
+      .menu-red:hover .title { color: #fff !important; }
+    </style>
 </head>
 <body class="fixed-top">
    <div class="header navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
          <div class="container-fluid">
-            <img src="images/logo2_movil.png" alt="logo"  width="159" height="108"/>
+            <a class="brand" href="index.html">
+            <img src="images/logo_movil_original.png" alt="logo" width="100" height="68"/>
+            </a>
+            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+            <img src="assets/img/menu-toggler.png" alt="" />
+            </a>
             <ul class="nav pull-right">
                <li class="dropdown user">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -356,14 +373,59 @@ foreach($puestos_for_default_mun as $p){
                   <span class="username"><?php echo htmlspecialchars($nombre ?? '')?> (<?php echo htmlspecialchars($_SESSION['usuarioasociado'] ?? '')?>)</span>
                   <i class="icon-angle-down"></i>
                   </a>
+                  <ul class="dropdown-menu">
+                     <li><a href="logout.php"><i class="icon-key"></i>Cerrar Session</a></li>
+                  </ul>
                </li>
             </ul>
          </div>
       </div>
    </div>
 
-<div class="page-container row-fluid" style="margin-top:120px;">
-  <div class="container-fluid">
+   <div class="page-container row-fluid">
+      <!-- BEGIN SIDEBAR -->
+      <div class="page-sidebar nav-collapse collapse">
+         <!-- BEGIN SIDEBAR MENU -->
+         <ul>
+            <li>
+               <div class="sidebar-toggler hidden-phone"></div>
+            </li>
+
+            <li class="has-sub">
+               <a href="diad_electoral.php">
+               <i class="icon-calendar"></i>
+               <span class="title">Dia Electoral</span>
+               <span class="arrow"></span>
+               </a>
+            </li>
+            <li class="menu-red">
+               <a href="informe_testigos.php">
+               <i class="icon-table"></i>
+               <span class="title">Informes</span>
+               </a>
+            </li>
+            <?php if($_SESSION['consulta']==0): ?>
+            <li class="active menu-red">
+               <a href="simulador_testigos.php">
+               <i class="icon-signal"></i>
+               <span class="title">Simulador</span>
+               <span class="selected"></span>
+               </a>
+            </li>
+            <?php endif; ?>
+            <li class="">
+               <a href="logout.php">
+               <i class="icon-user"></i>
+               <span class="title">Inicio</span>
+               </a>
+            </li>
+         </ul>
+         <!-- END SIDEBAR MENU -->
+      </div>
+      <!-- END SIDEBAR -->
+      <!-- BEGIN PAGE -->
+      <div class="page-content">
+         <div class="container-fluid">
     <div class="row-fluid">
       <div class="span12">
         <div class="portlet box blue">
@@ -536,7 +598,16 @@ foreach($puestos_for_default_mun as $p){
 </div><!-- page-container -->
 
 <script src="assets/js/jquery-1.8.3.min.js"></script>
+<script src="assets/breakpoints/breakpoints.js"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/jquery.blockui.js"></script>
+<script src="assets/js/jquery.cookie.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        App.init();
+    });
+</script>
 <script>
     var municipios = <?php echo json_encode($municipios); ?>;
     var puestosByZone = <?php echo json_encode($puestos_by_zone); ?>;

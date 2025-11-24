@@ -60,6 +60,12 @@ header('Content-Type: text/html; charset=ISO-8859-1');
    <link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" />
    <link rel="shortcut icon" href="images/favicon(2).ico" />
    <script type="text/javascript" src="js/FAjax.js"></script>
+   <style>
+      /* Menu hover rojo para Informes y Simulador */
+      .menu-red:hover { background-color: #c9302c !important; }
+      .menu-red:hover > a { color: #fff !important; }
+      .menu-red:hover .title { color: #fff !important; }
+   </style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -71,7 +77,7 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 			<div class="container-fluid">
 				<!-- BEGIN LOGO -->
 				<a class="brand" href="index.html">
-				<img src="images/logo2_movil.png" alt="logo"  width="129" height="100"/>
+				<img src="images/logo_movil_original.png" alt="logo" width="100" height="68"/>
 				</a>
 				<!-- END LOGO -->
 				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -126,25 +132,33 @@ header('Content-Type: text/html; charset=ISO-8859-1');
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
                <div class="sidebar-toggler hidden-phone"></div>
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-            </li> 
-          
-             <li class="active has-sub ">
-               <a href="javascript:;">
-               <i class="icon-table"></i> 
+            </li>
+
+			<li class="has-sub">
+				<a href="diad_electoral.php">
+				<i class="icon-calendar"></i>
+				<span class="title">Dia Electoral</span>
+				<span class="arrow"></span>
+				</a>
+			</li>
+			<li class="active menu-red">
+               <a href="informe_testigos.php">
+               <i class="icon-table"></i>
                <span class="title">Informes</span>
                <span class="selected"></span>
-               <span class="arrow open"></span>
                </a>
-               <ul class="sub">
-                  <li class="active"><a href="informe_municipal.php">Informe Municipal</a></li>
-                 
-               </ul>
-            </li>  
-			
-				
+            </li>
+            <?php if($_SESSION['consulta']==0): ?>
+            <li class="menu-red">
+               <a href="simulador_testigos.php">
+               <i class="icon-signal"></i>
+               <span class="title">Simulador</span>
+               </a>
+            </li>
+            <?php endif; ?>
             <li class="">
                <a href="logout.php">
-               <i class="icon-user"></i> 
+               <i class="icon-user"></i>
                <span class="title">Inicio</span>
                </a>
             </li>
@@ -165,198 +179,11 @@ header('Content-Type: text/html; charset=ISO-8859-1');
 <div class="row-fluid">
                <div class="span12">
                   <!-- BEGIN VALIDATION STATES-->
+                  <?php include 'monitor_testigos_content.php'; ?>
                   <!-- END VALIDATION STATES-->
 </div>
            </div>
-            <div class="row-fluid">
-				<div class="span12">
-						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet box light-grey">
-							<div class="portlet-title">
-								<h4><i class="icon-globe"></i>Dia Electoral</h4>
-								<div class="tools">
-									<a href="javascript:;" class="collapse"></a>
-									<a href="#portlet-config" data-toggle="modal" class="config"></a>
-									<a href="javascript:;" class="reload"></a>
-									<a href="javascript:;" class="remove"></a>
-								</div>
-							</div>
-							<div class="portlet-body">
-								<div class="clearfix">
-									
-								<!--	<div class="btn-group pull-right">
-										<button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
-										</button>
-										<ul class="dropdown-menu">
-											<li><a href="#">Print</a></li>
-											<li><a href="#">Save as PDF</a></li>
-											<li><a href="#">Export to Excel</a></li>
-										</ul>
-									</div>
-								</div>-->
-								<table class="table table-striped table-bordered table-hover" id="sample_1">
-									<thead>
-										<tr>
-											
-											<th>Nombre Testigo</th>
-											<th class="hidden-480">Movilizados</th>
-											<th ></th>
-										</tr>
-									</thead>
-									<tbody>
-									<? 
-									
-echo $sql="SELECT MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
-INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
-INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
-WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
-GROUP BY MUN.NOMBRE
-ORDER BY MOVILIZADOS ASC ";
-				$DBGestion->ConsultaArray($sql);				
-				$municipios=$DBGestion->datos;
-									;
-									
-						foreach ($municipios as $datos){
-							 $movilizados = $datos['MOVILIZADOS'];
-							 $nombre = $datos['NOMBRE'];
-							 
-							  			 
-				?>				
-										<tr class="odd gradeX">											
-											<td><? echo $nombre?></td>
-											<td class="hidden-480"><? echo number_format($movilizados, 0, ',', ',')?></td>								
-											<td ><?if($movilizados>50){ ?> 
-														<span class="label label-success">Aprobado</span> <? }else{ ?> 
-														<span class="label label-warning">No Reportado</span><? } ?>
-											</td>
-										</tr>
-										<?php } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- END EXAMPLE TABLE PORTLET-->
-					</div>
-				<div class="row-fluid">
-					<div class="span6 responsive" data-tablet="span12 fix-offset" data-desktop="span6">
-						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet box grey">
-							<div class="portlet-title">
-								<h4><i class="icon-user"></i>Puestos de Votaci&oacute;n Movilizados</h4>
-								
-							</div>
-							<div class="portlet-body">
-								<table class="table table-striped table-bordered table-hover" id="sample_2">
-									<thead>
-										<tr>											
-											<th>Puestos de Votaci&oacute;n</th>
-											<th class="hidden-480">Municipio</th>
-											<th class="hidden-480">Movilizados</th>
-										</tr>
-									</thead>
-									<tbody>
-										<? 
-									
-$sql="SELECT PV.NOMBRE_PUESTO, MUN.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS FROM boletines_departamentos BP
-INNER JOIN puestos_votacion PV ON PV.IDPUESTO=BP.IDPUESTO
-INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
-INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
-WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
-GROUP BY BP.IDPUESTO
-ORDER BY MOVILIZADOS DESC";
-				$DBGestion->ConsultaArray($sql);				
-				$municipios=$DBGestion->datos;
-									
-									
-						foreach ($municipios as $datos){
-							 $movilizados = $datos['MOVILIZADOS'];
-							 $nombre = $datos['NOMBRE_PUESTO'];
-							 $municipio=$datos['NOMBRE']; 
-							 
-							  			 
-				?>				
-										<tr class="odd gradeX">
-											<td><? echo $nombre?></td>
-											<td class="hidden-480"><? echo $municipio?></td>
-											<td class="hidden-480"><? echo number_format($movilizados, 0, ',', ',')?></td>								
-											<td ><?if($movilizados>50){ ?> 
-														<span class="label label-success">Aprobado</span> <? }else{ ?> 
-														<span class="label label-warning">No Reportado</span><? } ?>
-											</td>
-										</tr>
-						<? } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- END EXAMPLE TABLE PORTLET-->
-					</div>
-					<div class="span6 responsive" data-tablet="span12 fix-offset" data-desktop="span6">
-						<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						<div class="portlet box purple">
-							<div class="portlet-title">
-								<h4><i class="icon-cogs"></i>Lideres</h4>
-								
-							</div>
-							<div class="portlet-body">
-								<table class="table table-striped table-bordered table-hover" id="sample_3">
-									<thead>
-										<tr>
-											<th>Municipio</th>
-											<th class="hidden-480">Lider</th>
-											<th class="hidden-480">Movilizados</th>
-											<th class="hidden-480">Estado</th>
-										</tr>
-									</thead>
-									<tbody>
-									<? 
-									
-$sql="SELECT MUN.NOMBRE AS MUNICIPIO, U.NOMBRE, SUM(BP.MOVILIZADOS) AS MOVILIZADOS, U.USUARIO
-FROM boletines_departamentos BP
-INNER JOIN usuario U ON U.IDUSUARIO=BP.IDLIDER
-INNER JOIN puestos_votacion PV ON PV.IDPUESTO=BP.IDPUESTO AND PV.IDPUESTO IN (".$_SESSION["PUSTOSASIGNADOS"].")
-INNER JOIN municipios MUN ON MUN.ID=BP.IDMUNICIPIO AND MUN.ID IN (".$_SESSION["MUNICIPIOSASIGNADOS"].")
-INNER JOIN boletines BO ON BO.ID=BP.IDBOLETIN AND BO.SIMULACION=1
-WHERE BP.CANDIDATO = ".$_SESSION["idcandidato"]."
-GROUP BY U.IDUSUARIO";
-				$DBGestion->ConsultaArray($sql);				
-				$municipios=$DBGestion->datos;
-									
-									
-						foreach ($municipios as $datos){
-							 $movilizados = $datos['MOVILIZADOS'];
-							 $usuario = $datos['USUARIO'];
-							 $lider=$datos['NOMBRE']; 
-							 $municipio=$datos['MUNICIPIO']; 
 
-
-									?>
-										<tr class="odd gradeX">
-											<td ><? echo $municipio?></td>
-											<td class="hidden-480"><? echo $lider?></td>
-											<td class="hidden-480"><? echo number_format($movilizados, 0, ',', ',')?></td>	
-																						
-											<td ><?if($movilizados>50){ ?> 
-														<span class="label label-success">Aprobado</span> <? }else{ ?> 
-														<span class="label label-warning">No Reportado</span><? } ?>
-											</td>
-										</tr>
-						<? } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- END EXAMPLE TABLE PORTLET-->
-					</div>
-						
-					<!-- BEGIN DASHBOARD STATS -->
-					    <!-- END FORM-->
-                     </div>
-                  </div>
-                  <!-- END VALIDATION STATES-->
-               </div>
-            </div>
-            
             <!-- END PAGE CONTENT-->         
         </div>
          <!-- END PAGE CONTAINER-->
